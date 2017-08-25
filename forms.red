@@ -29,8 +29,8 @@ ToolboxMaxFontSize: 25
 
 ; Form sheet default values
 FormDefOrigin: 145x10
-FormDefXsize: WindowDefXsize - 150
-FormDefYsize: WindowDefYsize - 20
+FormDefXsize: WindowDefXsize - (ToolboxDefXsize + 25)
+FormDefYsize: WindowDefYsize - 25
 FormDefSize: as-pair FormDefXsize FormDefYsize
 
 ; Main screen layout
@@ -73,7 +73,7 @@ mainScreen: layout [
 	at FormDefOrigin
 	FormSheet: panel FormDefSize white blue cursor cross
 
-	
+	; Catch window resizing and adjust form
 	on-resize [mainScreenSizeAdjust]	
 	
 ]
@@ -81,7 +81,7 @@ mainScreen: layout [
 ; Create actor for on-resize
 mainScreen/actors: context [on-resize: func [f e][foreach-face f [if select face/actors 'on-resize [face/actors/on-resize face e]]]]
 
-; Window size adjust
+; Window resizing form adjust
 mainScreenSizeAdjust: does [
 
 	; Check new form minimal size and restore last window size if needed
