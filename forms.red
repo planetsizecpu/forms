@@ -62,7 +62,7 @@ mainScreen: layout [
 		FontSize: text bold 30x20 data to-integer ToolboxMaxFontSize / 2
 		return
 		below
-		FontSizesli: slider 90x25 50% on-change [FontSize/data: to-integer (to-float FontSizesli/data) * ToolboxMaxFontSize /100 ]
+		FontSizeSli: slider 90x25 50% on-change [FontSize/data: to-integer (to-float FontSizeSli/data) * ToolboxMaxFontSize /100 ]
 	]
 
 	; Save button
