@@ -32,9 +32,6 @@ FormDefXsize: WindowDefXsize - 150
 FormDefYsize: WindowDefYsize - 20
 FormDefSize: as-pair FormDefXsize FormDefYsize
 
-; Form sheet update function
-FormSheetUpdate: function [ClickPoint] [prin "CLICK POINT: " print ClickPoint]
-
 ; Main screen layout
 mainScreen: layout [
 
