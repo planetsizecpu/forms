@@ -8,7 +8,8 @@ Red [
 		Use for form scripts geration
 	}
 	History: [
-		0.1.0 "22-08-2017"	"First version."
+		0.1.0 "22-08-2017"	"Start of work."
+		0.1.1 "25-08-2017"  "Help of @rebolek to add some response to resizing"
 	]
 ]
 
@@ -16,15 +17,11 @@ Red [
 WindowDefXsize: 1024
 WindowDefYsize: 768
 WindowDefSize: as-pair WindowDefXsize WindowDefYsize
-prin "DEFAULT WINDOW  SIZE: "
-print WindowDefSize
 
 ; Toolboxes default values
 ToolboxDefXsize: 125
 ToolboxDefYsize: 200
 ToolboxDefSize: as-pair ToolboxDefXsize ToolboxDefYsize
-prin "DEFAULT TOOLBOX SIZE: "
-print ToolboxDefSize
 ToolboxWidgetList: ["Area" "Base" "Box" "Drop-Down" "Drop-List" "Field" "Image" "Panel" "Tab-Panel" "Text" "Text-List"]
 ToolboxDefFont: "Consolas"
 ToolboxMaxSize: 25
@@ -34,8 +31,6 @@ FormDefOrigin: 145x10
 FormDefXsize: WindowDefXsize - 150
 FormDefYsize: WindowDefYsize - 20
 FormDefSize: as-pair FormDefXsize FormDefYsize
-prin "DEFAULT FORM    SIZE: "
-print FormDefSize
 
 ; Form sheet update function
 FormSheetUpdate: function [ClickPoint] [prin "CLICK POINT: " print ClickPoint]
@@ -65,37 +60,49 @@ mainScreen: layout [
 		Font01: radio bold "Console" data on on-down [ToolboxDefFont: "Consolas"] 
 		Font02: radio bold "Terminal" on-down [ToolboxDefFont: "Terminal"] 
 		Font03: radio bold "Fixed" on-down [ToolboxDefFont: "Fixedsys"] 
-		text bold "Size"
 		across
-		FontSizesli: slider 60x25 50% on-change [FontSize/data: to-integer (to-float FontSizesli/data) * ToolboxMaxSize /100 ]
-		FontSize: text bold 30x25 data to-integer ToolboxMaxSize / 2
+		text bold 30x20 "Size" 
+		FontSize: text bold 30x20 data to-integer ToolboxMaxSize / 2
+		return
+		below
+		FontSizesli: slider 90x25 50% on-change [FontSize/data: to-integer (to-float FontSizesli/data) * ToolboxMaxSize /100 ]
+		; FontSize: text bold 30x25 data to-integer ToolboxMaxSize / 2
 	]
-		
+
+	; Save button
+	button 125x120 center blue white "FUTURE USE"
+	
 	; Form default design area
 	at FormDefOrigin
 	FormSheet: panel FormDefSize white blue cursor cross
+
 	
 	on-resize [mainScreenSizeAdjust]	
 	
 ]
 
 ; Create actor for on-resize
-mainScreen/actors: context [on-resize: func [f e][foreach-face f [if all [face select face 'actors select face/actors 'on-resize][face/actors/on-resize face e]]]]
+;mainScreen/actors: context [on-resize: func [f e][foreach-face f [if all [face select face 'actors select face/actors 'on-resize][face/actors/on-resize face e]]]]
+mainScreen/actors: context [on-resize: func [f e][foreach-face f [if select face/actors 'on-resize [face/actors/on-resize face e]]]]
 
 ; Window size adjust
 mainScreenSizeAdjust: does [
+
+	; Check new form minimal size and restore last window size if needed
+	if FormSheet/parent/size < 200x200 [FormSheet/parent/size: WindowDefSize]
+	
 	; Get new window size
 	WindowDefXsize: FormSheet/parent/size/x
 	WindowDefYsize: FormSheet/parent/size/y 
 	WindowDefSize: as-pair WindowDefXsize WindowDefYsize
-	prin "DEFAULT WINDOW  SIZE: "
-	print WindowDefSize
-
+	prin "WINDOW SIZE: "
+	prin WindowDefSize
+	
 	; Compute new form size
 	FormDefXsize: WindowDefXsize - 150
 	FormDefYsize: WindowDefYsize - 20
 	FormDefSize: as-pair FormDefXsize FormDefYsize
-	prin "DEFAULT FORM    SIZE: "
+	prin " - FORM SIZE: "
 	print FormDefSize
 
 	; Set new form size
