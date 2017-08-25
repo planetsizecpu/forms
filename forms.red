@@ -24,7 +24,7 @@ ToolboxDefYsize: 200
 ToolboxDefSize: as-pair ToolboxDefXsize ToolboxDefYsize
 ToolboxWidgetList: ["Area" "Base" "Box" "Drop-Down" "Drop-List" "Field" "Image" "Panel" "Tab-Panel" "Text" "Text-List"]
 ToolboxDefFont: "Consolas"
-ToolboxMaxSize: 25
+ToolboxMaxFontSize: 25
 
 ; Form sheet default values
 FormDefOrigin: 145x10
@@ -62,11 +62,10 @@ mainScreen: layout [
 		Font03: radio bold "Fixed" on-down [ToolboxDefFont: "Fixedsys"] 
 		across
 		text bold 30x20 "Size" 
-		FontSize: text bold 30x20 data to-integer ToolboxMaxSize / 2
+		FontSize: text bold 30x20 data to-integer ToolboxMaxFontSize / 2
 		return
 		below
-		FontSizesli: slider 90x25 50% on-change [FontSize/data: to-integer (to-float FontSizesli/data) * ToolboxMaxSize /100 ]
-		; FontSize: text bold 30x25 data to-integer ToolboxMaxSize / 2
+		FontSizesli: slider 90x25 50% on-change [FontSize/data: to-integer (to-float FontSizesli/data) * ToolboxMaxFontSize /100 ]
 	]
 
 	; Save button
