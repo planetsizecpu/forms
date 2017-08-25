@@ -5,7 +5,7 @@ Red [
 	Version: Under Development see below
 	Needs:	 'View
 	Usage:  {
-		Use for form scripts geration
+		Use for form scripts generation
 	}
 	History: [
 		0.1.0 "22-08-2017"	"Start of work."
