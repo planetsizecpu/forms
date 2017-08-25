@@ -78,7 +78,6 @@ mainScreen: layout [
 ]
 
 ; Create actor for on-resize
-;mainScreen/actors: context [on-resize: func [f e][foreach-face f [if all [face select face 'actors select face/actors 'on-resize][face/actors/on-resize face e]]]]
 mainScreen/actors: context [on-resize: func [f e][foreach-face f [if select face/actors 'on-resize [face/actors/on-resize face e]]]]
 
 ; Window size adjust
@@ -104,7 +103,6 @@ mainScreenSizeAdjust: does [
 	; Set new form size
 	FormSheet/size: FormDefSize
 	InfoFormSize/text: to-string FormDefSize
-
 ]
 
 ;
