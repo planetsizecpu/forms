@@ -9,7 +9,7 @@ Red [
 	}
 	History: [
 		0.1.0 "22-08-2017"	"Start of work."
-		0.1.1 "25-08-2017"  "Help of @rebolek to add some response to resizing"
+		0.1.1 "25-08-2017"  "Help of @rebolek to add form behavior on window resizing"
 	]
 ]
 
@@ -17,6 +17,7 @@ Red [
 WindowDefXsize: 1024
 WindowDefYsize: 768
 WindowDefSize: as-pair WindowDefXsize WindowDefYsize
+WindowMinSize: 200x200
 
 ; Toolboxes default values
 ToolboxDefXsize: 125
@@ -84,7 +85,7 @@ mainScreen/actors: context [on-resize: func [f e][foreach-face f [if select face
 mainScreenSizeAdjust: does [
 
 	; Check new form minimal size and restore last window size if needed
-	if FormSheet/parent/size < 200x200 [FormSheet/parent/size: WindowDefSize]
+	if FormSheet/parent/size < WindowMinSize [FormSheet/parent/size: WindowDefSize]
 	
 	; Get new window size
 	WindowDefXsize: FormSheet/parent/size/x
