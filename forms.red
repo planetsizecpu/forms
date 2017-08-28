@@ -25,15 +25,20 @@ ToolboxDefXsize: 125
 ToolboxDefYsize: 200
 ToolboxDefSize: as-pair ToolboxDefXsize ToolboxDefYsize
 ToolboxWidgetList: ["Area" "Base" "Box" "Drop-Down" "Drop-List" "Field" "Image" "Panel" "Tab-Panel" "Text" "Text-List"]
-ToolboxDefFontName: "Consolas"
-ToolboxDefFontStyl: "Normal"
-ToolboxDefFontSize: "12"
+
+; Font default values
+FontDefName: "Consolas"
+FontDefStyl: "Normal"
+FontDefSize: "12"
 
 ; Form sheet default values
 FormDefOrigin: 145x10
 FormDefXsize: WindowDefXsize - (ToolboxDefXsize + 25)
 FormDefYsize: WindowDefYsize - 25
 FormDefSize: as-pair FormDefXsize FormDefYsize
+FormSheetStr: ""
+FormSheetCounter: 0
+FormSheetContent: []
 
 ;
 ; Main screen layout
@@ -48,25 +53,27 @@ mainScreen: layout [
 	InfoGroup: group-box ToolboxDefSize "Form Info" [
 		across
 		text 30x25 left bold "Size" 
-		InfoFormSize: text 60x25 left bold data FormDefSize
+		InfoGroupFormSize: text 60x25 left bold data FormDefSize
 	]
 	
 	; Toolbox Widget list
-	WidgetGroup: group-box ToolboxDefSize "Widgets" [		
-		WidgetTList: text-list data ToolboxWidgetList select 1
+	WidgetGroup: group-box ToolboxDefSize "Widgets" [
+		below
+		WidgetGroupList: text-list data ToolboxWidgetList select 1
+		WidgetGroupInsbtn: button "Insert" on-click [FormSheetInsertWidget]
 	]
 	
 	; Toolbox Font controls
 	FontGroup: group-box ToolboxDefSize "Font" [ 
 		below
-		FontName: text bold 90x20 ToolboxDefFontName
-		FontStyl: text bold 90x20 ToolboxDefFontStyl
+		FontGroupFontName: text bold 90x20 FontDefName
+		FontGroupFontStyl: text bold 90x20 FontDefStyl
 		across
 		text bold 30x20 "Size:"
-		FontSize: text bold 30x20 ToolboxDefFontSize
+		FontGroupFontSize: text bold 30x20 FontDefSize
 		return
 		below
-		FontBtn: button bold "FONT" on-click [FormFontChange]
+		FontGroupFontBtn: button bold "FONT" on-click [FormFontChange]
 		return
 	]
 
@@ -75,7 +82,7 @@ mainScreen: layout [
 	
 	; Form default design area
 	at FormDefOrigin
-	FormSheet: panel FormDefSize white blue cursor cross
+	FormSheet: panel FormDefSize white blue cursor cross on-click [FormSheetUpdate]
 	
 	; Catch window resizing and adjust form
 	on-resize [mainScreenSizeAdjust]	
@@ -111,24 +118,28 @@ mainScreenSizeAdjust: does [
 
 	; Set new form size
 	FormSheet/size: FormDefSize
-	InfoFormSize/text: to-string FormDefSize
+	InfoGroupFormSize/text: to-string FormDefSize
 ]
 
 ; Font change behavior
 FormFontChange: does [
 	FontSel: request-font 
-	ToolboxDefFontName: FontSel/name 
-	ToolboxDefFontStyl: to-string FontSel/style
-	ToolboxDefFontSize: to-string FontSel/size 
-	FontName/text: ToolboxDefFontName
-	FontStyl/text: ToolboxDefFontStyl
-	FontSize/text: ToolboxDefFontSize
+	FontDefName: FontSel/name 
+	either FontSel/style [FontDefStyl: to-string FontSel/style] [print "BAD FONT STYLE"]
+	FontDefSize: to-string FontSel/size 
+	FontGroupFontName/text: FontDefName
+	FontGroupFontStyl/text: FontDefStyl
+	FontGroupFontSize/text: FontDefSize
 ]
 
-; Form Sheet Management
-FormSheetClick: does [
-	print "FORM SHEET CLICK..."
+; Form Sheet widget insertion process
+FormSheetInsertWidget: does [
+	FormSheetCounter: add FormSheetCounter 1
+	FormSheetStr: to-string FormSheetCounter
+	append FormSheetContent to-string FormSheetStr
+	print FormSheetContent
 ]
+
 
 ;
 ; Run code
