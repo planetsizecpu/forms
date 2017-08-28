@@ -10,6 +10,7 @@ Red [
 	History: [
 		0.1.0 "22-08-2017"	"Start of work."
 		0.1.1 "25-08-2017"  "Help of @rebolek to add form behavior on window resizing"
+		0.1.2 "28-08-2017"  "FontGroup upgrade to request-font, added resize flag"
 	]
 ]
 
@@ -24,8 +25,9 @@ ToolboxDefXsize: 125
 ToolboxDefYsize: 200
 ToolboxDefSize: as-pair ToolboxDefXsize ToolboxDefYsize
 ToolboxWidgetList: ["Area" "Base" "Box" "Drop-Down" "Drop-List" "Field" "Image" "Panel" "Tab-Panel" "Text" "Text-List"]
-ToolboxDefFont: "Consolas"
-ToolboxMaxFontSize: 25
+ToolboxDefFontName: "Consolas"
+ToolboxDefFontStyl: "Normal"
+ToolboxDefFontSize: "12"
 
 ; Form sheet default values
 FormDefOrigin: 145x10
@@ -33,7 +35,9 @@ FormDefXsize: WindowDefXsize - (ToolboxDefXsize + 25)
 FormDefYsize: WindowDefYsize - 25
 FormDefSize: as-pair FormDefXsize FormDefYsize
 
+;
 ; Main screen layout
+;
 mainScreen: layout [
 
 	title "RED FORMS PRATICE" 
@@ -55,15 +59,15 @@ mainScreen: layout [
 	; Toolbox Font controls
 	FontGroup: group-box ToolboxDefSize "Font" [ 
 		below
-		Font01: radio bold "Console" data on on-down [ToolboxDefFont: "Consolas"] 
-		Font02: radio bold "Terminal" on-down [ToolboxDefFont: "Terminal"] 
-		Font03: radio bold "Fixed" on-down [ToolboxDefFont: "Fixedsys"] 
+		FontName: text bold 90x20 ToolboxDefFontName
+		FontStyl: text bold 90x20 ToolboxDefFontStyl
 		across
-		text bold 30x20 "Size" 
-		FontSize: text bold 30x20 data to-integer ToolboxMaxFontSize / 2
+		text bold 30x20 "Size:"
+		FontSize: text bold 30x20 ToolboxDefFontSize
 		return
 		below
-		FontSizeSli: slider 90x25 50% on-change [FontSize/data: to-integer (to-float FontSizeSli/data) * ToolboxMaxFontSize ]
+		FontBtn: button bold "FONT" on-click [FormFontChange]
+		return
 	]
 
 	; Save button
@@ -72,14 +76,18 @@ mainScreen: layout [
 	; Form default design area
 	at FormDefOrigin
 	FormSheet: panel FormDefSize white blue cursor cross
-
+	
 	; Catch window resizing and adjust form
 	on-resize [mainScreenSizeAdjust]	
 	
 ]
 
-; Create actor for on-resize
+; Create actor for window on-resize
 mainScreen/actors: context [on-resize: func [f e][foreach-face f [if select face/actors 'on-resize [face/actors/on-resize face e]]]]
+
+;
+; Actions routines
+;
 
 ; Window resizing form adjust
 mainScreenSizeAdjust: does [
@@ -106,7 +114,23 @@ mainScreenSizeAdjust: does [
 	InfoFormSize/text: to-string FormDefSize
 ]
 
+; Font change behavior
+FormFontChange: does [
+	FontSel: request-font 
+	ToolboxDefFontName: FontSel/name 
+	ToolboxDefFontStyl: to-string FontSel/style
+	ToolboxDefFontSize: to-string FontSel/size 
+	FontName/text: ToolboxDefFontName
+	FontStyl/text: ToolboxDefFontStyl
+	FontSize/text: ToolboxDefFontSize
+]
+
+; Form Sheet Management
+FormSheetClick: does [
+	print "FORM SHEET CLICK..."
+]
+
 ;
-; RUN CODE
+; Run code
 ;
-view mainScreen
+view/flags mainScreen [resize]
