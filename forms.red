@@ -158,7 +158,7 @@ FormSheetInsertWidget: does [
 	write Formfile FormSheetStr
 	
 	; Create new widget into sheet
-	FormSheet: FormSheet [ do [reduce [FormSheetWidgetName FormSheetWidgetType 200x200 blue]]]
+	FormSheet: FormSheet [set reduce [FormSheetWidgetName] reduce [FormSheetWidgetType] 200x200 blue]
 ]
 
 
