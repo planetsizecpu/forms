@@ -157,7 +157,7 @@ FormSheetInsertWidget: does [
 	print FormSheetContent
 	write Formfile FormSheetStr
 	
-	; Create new widget into sheet
+	; Create new widget into sheet THIS IS NOT WORKING AS WE WANT
 	FormSheet: FormSheet [set reduce [FormSheetWidgetName] reduce [FormSheetWidgetType] 200x200 blue]
 ]
 
