@@ -11,6 +11,7 @@ Red [
 		0.1.0 "22-08-2017"	"Start of work."
 		0.1.1 "25-08-2017"  "Help of @rebolek to add form behavior on window resizing"
 		0.1.2 "28-08-2017"  "FontGroup upgrade to request-font, added resize flag"
+		0.1.3 "29-08-2017"  "Insert widget button, content list button & actions"
 	]
 ]
 
@@ -24,7 +25,7 @@ WindowMinSize: 200x200
 ToolboxDefXsize: 125
 ToolboxDefYsize: 200
 ToolboxDefSize: as-pair ToolboxDefXsize ToolboxDefYsize
-ToolboxWidgetList: ["Area" "Base" "Box" "Drop-Down" "Drop-List" "Field" "Image" "Panel" "Tab-Panel" "Text" "Text-List"]
+ToolboxWidgetList: ["area" "base" "box" "drop-down" "drop-list" "field" "image" "panel" "tab-panel" "text" "text-list"]
 
 ; Font default values
 FontDefName: "Consolas"
@@ -39,6 +40,10 @@ FormDefSize: as-pair FormDefXsize FormDefYsize
 FormSheetStr: ""
 FormSheetCounter: 0
 FormSheetContent: []
+FormFile: %formstmp.txt
+
+; Content screen layout
+contentScreen: layout [ title "Content" ContentList: text-list data FormSheetContent]
 
 ;
 ; Main screen layout
@@ -54,13 +59,16 @@ mainScreen: layout [
 		across
 		text 30x25 left bold "Size" 
 		InfoGroupFormSize: text 60x25 left bold data FormDefSize
+		return
+		below
+		ContentList: button bold "Content" on-click [view contentScreen]
 	]
 	
 	; Toolbox Widget list
 	WidgetGroup: group-box ToolboxDefSize "Widgets" [
 		below
 		WidgetGroupList: text-list data ToolboxWidgetList select 1
-		WidgetGroupInsbtn: button "Insert" on-click [FormSheetInsertWidget]
+		WidgetGroupInsbtn: button bold "Insert" on-click [FormSheetInsertWidget]
 	]
 	
 	; Toolbox Font controls
@@ -73,7 +81,7 @@ mainScreen: layout [
 		FontGroupFontSize: text bold 30x20 FontDefSize
 		return
 		below
-		FontGroupFontBtn: button bold "FONT" on-click [FormFontChange]
+		FontGroupFontBtn: button bold "Font" on-click [FormFontChange]
 		return
 	]
 
@@ -82,7 +90,7 @@ mainScreen: layout [
 	
 	; Form default design area
 	at FormDefOrigin
-	FormSheet: panel FormDefSize white blue cursor cross on-click [FormSheetUpdate]
+	FormSheet: panel FormDefSize white blue cursor cross
 	
 	; Catch window resizing and adjust form
 	on-resize [mainScreenSizeAdjust]	
@@ -134,10 +142,23 @@ FormFontChange: does [
 
 ; Form Sheet widget insertion process
 FormSheetInsertWidget: does [
+	
+	; Compute widget name 
+	FormSheetStr: ""
 	FormSheetCounter: add FormSheetCounter 1
-	FormSheetStr: to-string FormSheetCounter
-	append FormSheetContent to-string FormSheetStr
+	FormSheetStr: to-string ToolboxWidgetList/(WidgetGroupList/selected)
+	FormSheetWidgetType: to-word FormSheetStr
+	append FormSheetStr to-string FormSheetCounter
+	append FormSheetStr ":"
+	FormSheetWidgetName: to-word FormSheetStr
+	
+	; Add widget to content list
+	append FormSheetContent FormSheetStr
 	print FormSheetContent
+	write Formfile FormSheetStr
+	
+	; Create new widget into sheet
+	FormSheet: FormSheet [ do [reduce [FormSheetWidgetName FormSheetWidgetType 200x200 blue]]]
 ]
 
 
