@@ -45,6 +45,9 @@ FormFile: %formstmp.txt
 ; Content screen layout
 contentScreen: layout [ title "Content" ContentList: text-list data FormSheetContent]
 
+; Base widget layout
+WidBase: layout [base 100x100 blue]
+
 ;
 ; Main screen layout
 ;
@@ -61,14 +64,14 @@ mainScreen: layout [
 		InfoGroupFormSize: text 60x25 left bold data FormDefSize
 		return
 		below
-		ContentList: button bold "Content" on-click [view contentScreen]
+		ContentList: button bold "Content" [view contentScreen]
 	]
 	
 	; Toolbox Widget list
 	WidgetGroup: group-box ToolboxDefSize "Widgets" [
 		below
 		WidgetGroupList: text-list data ToolboxWidgetList select 1
-		WidgetGroupInsbtn: button bold "Insert" on-click [FormSheetInsertWidget]
+		WidgetGroupInsbtn: button bold "Insert" [FormSheetInsertWidget]
 	]
 	
 	; Toolbox Font controls
@@ -81,7 +84,7 @@ mainScreen: layout [
 		FontGroupFontSize: text bold 30x20 FontDefSize
 		return
 		below
-		FontGroupFontBtn: button bold "Font" on-click [FormFontChange]
+		FontGroupFontBtn: button bold "Font" [FormFontChange]
 		return
 	]
 
@@ -90,7 +93,7 @@ mainScreen: layout [
 	
 	; Form default design area
 	at FormDefOrigin
-	FormSheet: panel FormDefSize white blue cursor cross
+	FormSheet: panel FormDefSize white blue cursor cross []
 	
 	; Catch window resizing and adjust form
 	on-resize [mainScreenSizeAdjust]	
@@ -158,7 +161,7 @@ FormSheetInsertWidget: does [
 	write Formfile FormSheetStr
 	
 	; Create new widget into sheet THIS IS NOT WORKING AS WE WANT
-	FormSheet: FormSheet [set reduce [FormSheetWidgetName] reduce [FormSheetWidgetType] 200x200 blue]
+	append FormSheet/pane WidBase/pane
 ]
 
 
