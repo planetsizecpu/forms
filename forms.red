@@ -28,6 +28,7 @@ ToolboxDefSize: as-pair ToolboxDefXsize ToolboxDefYsize
 ToolboxWidgetList: ["area" "base" "box" "drop-down" "drop-list" "field" "image" "panel" "tab-panel" "text" "text-list"]
 
 ; Font default values
+FontSel: ["Consolas" "normal" 10]
 FontDefName: "Consolas"
 FontDefStyl: "Normal"
 FontDefSize: "12"
@@ -151,32 +152,25 @@ FormSheetInsertWidget: does [
 	FormSheetWidgetName: null
 	FormSheetCounter: add FormSheetCounter 1
 	FormSheetStr: to-string ToolboxWidgetList/(WidgetGroupList/selected)
-	
-	prin "1 - Initial Str  "
-	print FormSheetStr
-
-	FormSheetWidgetType: FormSheetStr
-	prin "2 - Initial Type "
-	print FormSheetWidgetType
-	
+	FormSheetWidgetType: to-word copy FormSheetStr
 	append FormSheetStr to-string FormSheetCounter
 	append FormSheetStr ":"
 	FormSheetWidgetName: to-word FormSheetStr
 
-	prin "3 - Type After APPEND on Str "
-	print FormSheetWidgetType
-	
-	
 	; Add widget to content list
 	append FormSheetContent FormSheetStr
 
-	; Create widget layout
-	set (FormSheetWidgetName) layout reduce [(FormSheetWidgetType) 100x30 blue "loose"]
-		
-	; Create new widget into sheet
-	append FormSheet/pane (FormSheetWidgetName)/pane
-]
+	; Create widget layout (WE ARE WORKING HERE)
+	
+	; This code doesn't work as pane but works as layout alone, so we not use it
+	; set (FormSheetWidgetName) layout reduce [(FormSheetWidgetType) 100x30 blue ]
 
+	; This code works
+	ly: layout reduce [(FormSheetWidgetType) 100x100 'font FontSel blue white 'loose]
+	
+	; Create new widget into sheet
+	append FormSheet/pane ly/pane
+]
 
 ;
 ; Run code
