@@ -12,6 +12,7 @@ Red [
 		0.1.1 "25-08-2017"  "Help of @rebolek to add form behavior on window resizing"
 		0.1.2 "28-08-2017"  "FontGroup upgrade to request-font, added resize flag"
 		0.1.3 "29-08-2017"  "Insert widget button, content list button & actions"
+		0.1.4 "01-08-2017"  "Widget insertion process start"
 	]
 ]
 
