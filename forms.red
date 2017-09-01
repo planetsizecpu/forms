@@ -40,13 +40,12 @@ FormDefSize: as-pair FormDefXsize FormDefYsize
 FormSheetStr: ""
 FormSheetCounter: 0
 FormSheetContent: []
-FormFile: %formstmp.txt
 
 ; Content screen layout
 contentScreen: layout [ title "Content" ContentList: text-list data FormSheetContent]
 
 ; Base widget layout
-WidBase: layout [base 100x100 blue]
+WidBase: layout [base 100x100 blue loose]
 
 ;
 ; Main screen layout
@@ -147,21 +146,35 @@ FormFontChange: does [
 FormSheetInsertWidget: does [
 	
 	; Compute widget name 
-	FormSheetStr: ""
+	FormSheetStr: null
+	FormSheetWidgetType: null
+	FormSheetWidgetName: null
 	FormSheetCounter: add FormSheetCounter 1
 	FormSheetStr: to-string ToolboxWidgetList/(WidgetGroupList/selected)
-	FormSheetWidgetType: to-word FormSheetStr
+	
+	prin "1 - Initial Str  "
+	print FormSheetStr
+
+	FormSheetWidgetType: FormSheetStr
+	prin "2 - Initial Type "
+	print FormSheetWidgetType
+	
 	append FormSheetStr to-string FormSheetCounter
 	append FormSheetStr ":"
 	FormSheetWidgetName: to-word FormSheetStr
+
+	prin "3 - Type After APPEND on Str "
+	print FormSheetWidgetType
+	
 	
 	; Add widget to content list
 	append FormSheetContent FormSheetStr
-	print FormSheetContent
-	write Formfile FormSheetStr
-	
-	; Create new widget into sheet THIS IS NOT WORKING AS WE WANT
-	append FormSheet/pane WidBase/pane
+
+	; Create widget layout
+	set (FormSheetWidgetName) layout reduce [(FormSheetWidgetType) 100x30 blue "loose"]
+		
+	; Create new widget into sheet
+	append FormSheet/pane (FormSheetWidgetName)/pane
 ]
 
 
