@@ -13,6 +13,7 @@ Red [
 		0.1.2 "28-08-2017"  "FontGroup upgrade to request-font, added resize flag"
 		0.1.3 "29-08-2017"  "Insert widget button, content list button & actions"
 		0.1.4 "01-08-2017"  "Widget insertion process start"
+		0.1.5 "04-08-2017"  "Added random color to widgets while wait for request-colour dialog"
 	]
 ]
 
@@ -25,7 +26,9 @@ WindowMinSize: 200x200
 ; Toolboxes default values
 ToolboxDefXsize: 125
 ToolboxDefYsize: 200
-ToolboxDefSize: as-pair ToolboxDefXsize ToolboxDefYsize
+ToolboxBigSize: as-pair ToolboxDefXsize ToolboxDefYsize
+ToolboxMidSize: as-pair ToolboxDefXsize (ToolboxDefYsize / 1.5)
+ToolboxLowSize: as-pair ToolboxDefXsize (ToolboxDefYsize / 2)
 ToolboxWidgetList: ["area" "base" "box" "drop-down" "drop-list" "field" "image" "panel" "tab-panel" "text" "text-list"]
 
 ; Font default values
@@ -42,12 +45,10 @@ FormDefSize: as-pair FormDefXsize FormDefYsize
 FormSheetStr: ""
 FormSheetCounter: 0
 FormSheetContent: []
+FormSheetWidgetColour: 255.255.255
 
 ; Content screen layout
 contentScreen: layout [ title "Content" ContentList: text-list data FormSheetContent]
-
-; Base widget layout
-WidBase: layout [base 100x100 blue loose]
 
 ;
 ; Main screen layout
@@ -57,40 +58,41 @@ mainScreen: layout [
 	title "RED FORMS PRATICE" 
 	size WindowDefSize
 	below
+	style btn: button 100x20 red black bold
 	
 	; Toolbox info
-	InfoGroup: group-box ToolboxDefSize "Form Info" [
+	InfoGroup: group-box ToolboxLowSize "Form Info" [
 		across
 		text 30x25 left bold "Size" 
 		InfoGroupFormSize: text 60x25 left bold data FormDefSize
 		return
 		below
-		ContentList: button bold "Content" [view contentScreen]
+		ContentList: btn "Content" [view contentScreen]
 	]
 	
 	; Toolbox Widget list
-	WidgetGroup: group-box ToolboxDefSize "Widgets" [
+	WidgetGroup: group-box ToolboxBigSize "Widgets" [
 		below
 		WidgetGroupList: text-list data ToolboxWidgetList select 1
-		WidgetGroupInsbtn: button bold "Insert" [FormSheetInsertWidget]
+		WidgetGroupInsbtn: btn bold "Insert" [FormSheetInsertWidget]
 	]
 	
 	; Toolbox Font controls
-	FontGroup: group-box ToolboxDefSize "Font" [ 
+	FontGroup: group-box ToolboxMidSize "Font" [ 
 		below
-		FontGroupFontName: text bold 90x20 FontDefName
-		FontGroupFontStyl: text bold 90x20 FontDefStyl
+		FontGroupFontName: text bold 90x15 FontDefName
+		FontGroupFontStyl: text bold 90x15 FontDefStyl
 		across
-		text bold 30x20 "Size:"
-		FontGroupFontSize: text bold 30x20 FontDefSize
+		text bold 30x15 "Size:"
+		FontGroupFontSize: text bold 30x15 FontDefSize
 		return
 		below
-		FontGroupFontBtn: button bold "Font" [FormFontChange]
+		FontGroupFontBtn: btn bold "Font" [FormFontChange]
 		return
 	]
 
 	; Save button
-	button 125x120 center blue white "FUTURE USE"
+	button 125x30 center blue white "FUTURE USE"
 	
 	; Form default design area
 	at FormDefOrigin
@@ -157,19 +159,20 @@ FormSheetInsertWidget: does [
 	append FormSheetStr to-string FormSheetCounter
 	append FormSheetStr ":"
 	FormSheetWidgetName: to-word FormSheetStr
-
+	
+	; By now we use random colours whie wait for request-colour dialog
+	FormSheetWidgetBackground: random (FormSheetWidgetColour)
+	FormSheetWidgetForeground: random (FormSheetWidgetColour)
+	
 	; Add widget to content list
 	append FormSheetContent FormSheetStr
 
 	; Create widget layout (WE ARE WORKING HERE)
 	
-	; This code doesn't work as pane but works as layout alone, so we not use it
-	; set (FormSheetWidgetName) layout reduce [(FormSheetWidgetType) 100x30 blue ]
-
-	; This code works
-	ly: layout reduce [(FormSheetWidgetType) 100x100 'font FontSel blue white 'loose]
+	; Make a dummy face to copy the pane from, and append to form sheet. Don't found other documented method
+	ly: layout reduce [(FormSheetWidgetType) 100x100 'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) [] 'loose] 
 	
-	; Create new widget into sheet
+	; Create new widget into sheet by copying pane from dummy layout
 	append FormSheet/pane ly/pane
 ]
 
