@@ -25,7 +25,7 @@ WindowMinSize: 200x200
 
 ; Toolboxes default values
 ToolboxDefXsize: 125
-ToolboxDefYsize: 200
+ToolboxDefYsize: 300
 ToolboxBigSize: as-pair ToolboxDefXsize ToolboxDefYsize
 ToolboxMidSize: as-pair ToolboxDefXsize (ToolboxDefYsize / 1.5)
 ToolboxLowSize: as-pair ToolboxDefXsize (ToolboxDefYsize / 2)
@@ -44,11 +44,20 @@ FormDefYsize: WindowDefYsize - 25
 FormDefSize: as-pair FormDefXsize FormDefYsize
 FormSheetStr: ""
 FormSheetCounter: 0
-FormSheetContent: []
-FormSheetWidgetColour: 255.255.255
+FormSheetContent: copy []
+FormSheetRecodeBlock: copy []
+FormSheetWidgetSize: 100x25
+FormSheetWidgetBackground: blue
+FormSheetWidgetForeground: white
 
-; Content screen layout
-contentScreen: layout [ title "Content" ContentList: text-list data FormSheetContent]
+; Widget recode screen layout
+recodeScreen: layout [ 
+	title "Widget Recode Screen" 
+	size 500x300
+	across
+	WidgetList: text-list 200x250 data FormSheetContent
+	RecodeList: text-list 200x250 data FormSheetRecodeBlock
+]
 
 ;
 ; Main screen layout
@@ -67,23 +76,31 @@ mainScreen: layout [
 		InfoGroupFormSize: text 60x25 left bold data FormDefSize
 		return
 		below
-		ContentList: btn "Content" [view contentScreen]
+		ContentButton: btn "Content" [view recodeScreen]
 	]
 	
 	; Toolbox Widget list
 	WidgetGroup: group-box ToolboxBigSize "Widgets" [
+		across
+		text 30x25 bold "Size"
+		WidgetGroupSize: field 70x20 data FormSheetWidgetSize
+		return
+		across
+		box 25x25 FormSheetWidgetForeground
+		box 25x25 FormSheetWidgetBackground
+		return
 		below
 		WidgetGroupList: text-list data ToolboxWidgetList select 1
 		WidgetGroupInsbtn: btn bold "Insert" [FormSheetInsertWidget]
 	]
 	
 	; Toolbox Font controls
-	FontGroup: group-box ToolboxMidSize "Font" [ 
+	FontGroup: group-box ToolboxLowSize "Font" [ 
 		below
 		FontGroupFontName: text bold 90x15 FontDefName
 		FontGroupFontStyl: text bold 90x15 FontDefStyl
 		across
-		text bold 30x15 "Size:"
+		text 30x25 bold "Size:"
 		FontGroupFontSize: text bold 30x15 FontDefSize
 		return
 		below
@@ -92,7 +109,7 @@ mainScreen: layout [
 	]
 
 	; Save button
-	button 125x30 center blue white "FUTURE USE"
+	CalcButton: btn "RECODE" [Recode]
 	
 	; Form default design area
 	at FormDefOrigin
@@ -100,7 +117,6 @@ mainScreen: layout [
 	
 	; Catch window resizing and adjust form
 	on-resize [mainScreenSizeAdjust]	
-	
 ]
 
 ; Create actor for window on-resize
@@ -120,15 +136,11 @@ mainScreenSizeAdjust: does [
 	WindowDefXsize: FormSheet/parent/size/x
 	WindowDefYsize: FormSheet/parent/size/y 
 	WindowDefSize: as-pair WindowDefXsize WindowDefYsize
-	prin "WINDOW SIZE: "
-	prin WindowDefSize
 	
 	; Compute new form size
 	FormDefXsize: WindowDefXsize - 150
 	FormDefYsize: WindowDefYsize - 20
 	FormDefSize: as-pair FormDefXsize FormDefYsize
-	prin " - FORM SIZE: "
-	print FormDefSize
 
 	; Set new form size
 	FormSheet/size: FormDefSize
@@ -151,29 +163,36 @@ FormSheetInsertWidget: does [
 	
 	; Compute widget name 
 	FormSheetStr: null
-	FormSheetWidgetType: null
 	FormSheetWidgetName: null
+	FormSheetWidgetType: null
 	FormSheetCounter: add FormSheetCounter 1
 	FormSheetStr: to-string ToolboxWidgetList/(WidgetGroupList/selected)
 	FormSheetWidgetType: to-word copy FormSheetStr
 	append FormSheetStr to-string FormSheetCounter
 	append FormSheetStr ":"
-	FormSheetWidgetName: to-word FormSheetStr
-	
-	; By now we use random colours whie wait for request-colour dialog
-	FormSheetWidgetBackground: random (FormSheetWidgetColour)
-	FormSheetWidgetForeground: random (FormSheetWidgetColour)
+	FormSheetWidgetName: to-set-word FormSheetStr
 	
 	; Add widget to content list
 	append FormSheetContent FormSheetStr
-
-	; Create widget layout (WE ARE WORKING HERE)
 	
 	; Make a dummy face to copy the pane from, and append to form sheet. Don't found other documented method
-	ly: layout reduce [(FormSheetWidgetType) 100x100 'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) [] 'loose] 
+	ly: layout reduce [(FormSheetWidgetName) (FormSheetWidgetType) (WidgetGroupSize/data) 'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) [] 'loose ] 
 	
 	; Create new widget into sheet by copying pane from dummy layout
 	append FormSheet/pane ly/pane
+]
+
+; Compute code block for save
+Recode: does [
+	
+	; Init recode block
+	; FormSheetRecodeBlock: copy []
+	
+	; Compute each widget on content list
+	foreach Wgt FormSheetContent [
+		append  FormSheetRecodeBlock Wgt
+	]
+	print FormSheetRecodeBlock
 ]
 
 ;
