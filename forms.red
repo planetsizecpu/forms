@@ -186,13 +186,18 @@ FormSheetInsertWidget: does [
 Recode: does [
 	
 	; Init recode block
-	; FormSheetRecodeBlock: copy []
+	clear FormSheetRecodeBlock
 	
 	; Compute each widget on content list
 	foreach Wgt FormSheetContent [
-		append  FormSheetRecodeBlock Wgt
+		Widget: Wgt
+		Wname: to-word Wgt
+		Wtype: reduce ((Wname)/type)
+		
+		append Widget to-string Wname Wtype 
+		print Widget
+		append  FormSheetRecodeBlock Widget
 	]
-	print FormSheetRecodeBlock
 ]
 
 ;
