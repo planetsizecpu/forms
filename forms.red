@@ -179,7 +179,7 @@ FormSheetInsertWidget: does [
 	; Add widget to content list
 	append FormSheetContent FormSheetStr
 	
-	; Make a dummy face to copy the pane from, and append to form sheet. Don't found other documented method
+	; Make a dummy face to copy the pane from, and append to form sheet. Can't find other documented method
 	ly: layout reduce [(FormSheetWidgetName) (FormSheetWidgetType) (WidgetGroupSize/data) 'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) [] 'loose ] 
 	
 	; Create new widget into sheet by copying pane from dummy layout
