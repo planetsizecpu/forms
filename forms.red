@@ -15,6 +15,7 @@ Red [
 		0.1.4 "01-08-2017"  "Widget insertion process start"
 		0.1.5 "04-08-2017"  "Added color to widgets while wait for request-colour dialog"
 		0.1.6 "06-09-2017"  "Added recode routine & save button, help of @rebolek on get values"
+							"start to be usable"
 	]
 ]
 
@@ -180,11 +181,12 @@ FormSheetAddWidget: does [
 	append FormSheetContent FormSheetStr
 	
 	; Make a dummy face to copy the pane from, and append to form sheet. Can't find other documented method
-	ly: layout reduce [(FormSheetWidgetName) (FormSheetWidgetType) (WidgetGroupSize/data) 'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) [] 'loose ] 
+	Dly: layout reduce [(FormSheetWidgetName) (FormSheetWidgetType) (WidgetGroupSize/data) 'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) [] 'loose ] 
 	
 	; Create new widget into sheet by copying pane from dummy layout
-	append FormSheet/pane ly/pane
+	append FormSheet/pane Dly/pane
 	
+	; Recode all widgets
 	do Recode
 ]
 
