@@ -11,9 +11,10 @@ Red [
 		0.1.0 "22-08-2017"	"Start of work."
 		0.1.1 "25-08-2017"  "Help of @rebolek to add form behavior on window resizing"
 		0.1.2 "28-08-2017"  "FontGroup upgrade to request-font, added resize flag"
-		0.1.3 "29-08-2017"  "Insert widget button, content list button & actions"
+		0.1.3 "29-08-2017"  "Insert widget button, recode list button & actions"
 		0.1.4 "01-08-2017"  "Widget insertion process start"
-		0.1.5 "04-08-2017"  "Added random color to widgets while wait for request-colour dialog"
+		0.1.5 "04-08-2017"  "Added color to widgets while wait for request-colour dialog"
+		0.1.6 "06-09-2017"  "Added recode routine & save button, help of @rebolek on get values"
 	]
 ]
 
@@ -44,8 +45,8 @@ FormDefYsize: WindowDefYsize - 25
 FormDefSize: as-pair FormDefXsize FormDefYsize
 FormSheetStr: ""
 FormSheetCounter: 0
-FormSheetContent: copy []
-FormSheetRecodeBlock: copy []
+FormSheetContent: []
+FormSheetRecodeBlock: []
 FormSheetWidgetSize: 100x25
 FormSheetWidgetBackground: blue
 FormSheetWidgetForeground: white
@@ -54,9 +55,9 @@ FormSheetWidgetForeground: white
 recodeScreen: layout [ 
 	title "Widget Recode Screen" 
 	size 500x300
-	across
-	WidgetList: text-list 200x250 data FormSheetContent
-	RecodeList: text-list 200x250 data FormSheetRecodeBlock
+	below
+	text 480x15 left brick white "name: type: offset: size: color: "
+	RecodeList: text-list 480x250 data FormSheetRecodeBlock
 ]
 
 ;
@@ -108,8 +109,11 @@ mainScreen: layout [
 		return
 	]
 
+	; Recode button
+	button 120x20 red black bold "RECODE" [Recode]
+	
 	; Save button
-	CalcButton: btn "RECODE" [Recode]
+	button 120x20 red black bold "SAVE" [Recode save request-file FormSheetRecodeBlock]
 	
 	; Form default design area
 	at FormDefOrigin
@@ -180,6 +184,8 @@ FormSheetInsertWidget: does [
 	
 	; Create new widget into sheet by copying pane from dummy layout
 	append FormSheet/pane ly/pane
+	
+	do Recode
 ]
 
 ; Compute code block for save
@@ -190,13 +196,29 @@ Recode: does [
 	
 	; Compute each widget on content list
 	foreach Wgt FormSheetContent [
-		Widget: Wgt
-		Wname: to-word Wgt
-		Wtype: reduce ((Wname)/type)
-		
-		append Widget to-string Wname Wtype 
-		print Widget
-		append  FormSheetRecodeBlock Widget
+		; Get widget values as word
+		Wgw: get to word! Wgt
+		; Get name
+		Widget: copy Wgt
+		append Widget " "
+		; Get type
+		Wtype: Wgw/type
+		append Widget Wtype
+		append Widget " "
+		; Get offset
+		Woffset: Wgw/offset
+		append Widget Woffset
+		append Widget " "
+		; Get size
+		Wsize: Wgw/size
+		append Widget Wsize
+		append Widget " "
+		; Get color
+		Wcolor: Wgw/color
+		append Widget Wcolor
+		append Widget " "
+		; Append widget to code block
+		append FormSheetRecodeBlock Widget
 	]
 ]
 
