@@ -92,7 +92,7 @@ mainScreen: layout [
 		return
 		below
 		WidgetGroupList: text-list data ToolboxWidgetList select 1
-		WidgetGroupInsbtn: btn bold "Insert" [FormSheetInsertWidget]
+		WidgetGroupAddbtn: btn bold "Add" [FormSheetAddWidget]
 	]
 	
 	; Toolbox Font controls
@@ -162,8 +162,8 @@ FormFontChange: does [
 	FontGroupFontSize/text: FontDefSize
 ]
 
-; Form Sheet widget insertion process
-FormSheetInsertWidget: does [
+; Form Sheet widget adition process
+FormSheetAddWidget: does [
 	
 	; Compute widget name 
 	FormSheetStr: null
