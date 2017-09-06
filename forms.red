@@ -15,7 +15,7 @@ Red [
 		0.1.4 "01-08-2017"  "Widget insertion process start"
 		0.1.5 "04-08-2017"  "Added color to widgets while wait for request-colour dialog"
 		0.1.6 "06-09-2017"  "Added recode routine & save button, help of @rebolek on get values"
-							"start to be usable"
+							"recode button deleted, function now done by content button"
 	]
 ]
 
@@ -78,7 +78,7 @@ mainScreen: layout [
 		InfoGroupFormSize: text 60x25 left bold data FormDefSize
 		return
 		below
-		ContentButton: btn "Content" [view recodeScreen]
+		ContentButton: btn "Content/Recode" [Recode view recodeScreen]
 	]
 	
 	; Toolbox Widget list
@@ -109,9 +109,6 @@ mainScreen: layout [
 		FontGroupFontBtn: btn bold "Font" [FormFontChange]
 		return
 	]
-
-	; Recode button
-	button 120x20 red black bold "RECODE" [Recode]
 	
 	; Save button
 	button 120x20 red black bold "SAVE" [Recode save request-file FormSheetRecodeBlock]
