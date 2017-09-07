@@ -49,8 +49,8 @@ FormSheetCounter: 0
 FormSheetContent: []
 FormSheetRecodeBlock: []
 FormSheetWidgetSize: 100x25
-FormSheetWidgetBackground: blue
-FormSheetWidgetForeground: white
+FormSheetWidgetBackground: beige
+FormSheetWidgetForeground: blue
 
 ; Widget recode screen layout
 recodeScreen: layout [ 
@@ -88,8 +88,8 @@ mainScreen: layout [
 		WidgetGroupSize: field 70x20 data FormSheetWidgetSize
 		return
 		across
-		box 25x25 FormSheetWidgetForeground
-		box 25x25 FormSheetWidgetBackground
+		WidgetGroupFgn: box 25x25 FormSheetWidgetForeground
+		WidgetGroupBgn: box 25x25 FormSheetWidgetBackground
 		return
 		below
 		WidgetGroupList: text-list data ToolboxWidgetList select 1
