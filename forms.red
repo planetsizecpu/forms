@@ -5,7 +5,7 @@ Red [
 	Version: Under Development see below
 	Needs:	 'View
 	Usage:  {
-		Use for form scripts generation
+		Use for form scripts generation, save result then copy&paste code
 	}
 	History: [
 		0.1.0 "22-08-2017"	"Start of work."
@@ -16,6 +16,7 @@ Red [
 		0.1.5 "04-08-2017"  "Added color to widgets while wait for request-colour dialog"
 		0.1.6 "06-09-2017"  "Added recode routine & save button, help of @rebolek on get values"
 							"recode button deleted, function now done by content button"
+		0.1.7 "07-09-2017"  "Added some widgets to list, save function enhanced with 'at' "
 	]
 ]
 
@@ -31,7 +32,7 @@ ToolboxDefYsize: 300
 ToolboxBigSize: as-pair ToolboxDefXsize ToolboxDefYsize
 ToolboxMidSize: as-pair ToolboxDefXsize (ToolboxDefYsize / 1.5)
 ToolboxLowSize: as-pair ToolboxDefXsize (ToolboxDefYsize / 2)
-ToolboxWidgetList: ["area" "base" "box" "drop-down" "drop-list" "field" "image" "panel" "tab-panel" "text" "text-list"]
+ToolboxWidgetList: ["area" "base" "box" "button" "camera" "check" "drop-down" "drop-list" "field" "group-box" "image" "panel" "progress" "radio" "slider" "tab-panel" "text" "text-list"]
 
 ; Font default values
 FontSel: ["Consolas" "normal" 10]
@@ -66,7 +67,7 @@ recodeScreen: layout [
 ;
 mainScreen: layout [
 
-	title "RED FORMS PRATICE" 
+	title "RED FORMS" 
 	size WindowDefSize
 	below
 	style btn: button 100x20 red black bold
@@ -111,7 +112,7 @@ mainScreen: layout [
 	]
 	
 	; Save button
-	button 120x20 red black bold "SAVE" [Recode save request-file FormSheetRecodeBlock]
+	button 120x20 red black bold "SAVE" [Recode write/lines request-file FormSheetRecodeBlock]
 	
 	; Form default design area
 	at FormDefOrigin
@@ -197,22 +198,24 @@ Recode: does [
 	foreach Wgt FormSheetContent [
 		; Get widget values as word
 		Wgw: get to word! Wgt
-		; Get name
-		Widget: copy Wgt
-		append Widget " "
-		; Get type
-		Wtype: Wgw/type
-		append Widget Wtype
-		append Widget " "
-		; Get offset
+		; Set location
+		Widget: copy "at "
+		; Set offset
 		Woffset: Wgw/offset
 		append Widget Woffset
 		append Widget " "
-		; Get size
+		; Set name
+		append Widget Wgt
+		append Widget " "
+		; Set type
+		Wtype: Wgw/type
+		append Widget Wtype
+		append Widget " "
+		; Set size
 		Wsize: Wgw/size
 		append Widget Wsize
 		append Widget " "
-		; Get color
+		; Set color
 		Wcolor: Wgw/color
 		append Widget Wcolor
 		append Widget " "
