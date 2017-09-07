@@ -15,7 +15,6 @@ Red [
 		0.1.4 "01-08-2017"  "Widget insertion process start"
 		0.1.5 "04-08-2017"  "Added color to widgets while wait for request-colour dialog"
 		0.1.6 "06-09-2017"  "Added recode routine & save button, help of @rebolek on get values"
-							"recode button deleted, function now done by content button"
 		0.1.7 "07-09-2017"  "Added some widgets to list, save function enhanced with 'at' "
 	]
 ]
