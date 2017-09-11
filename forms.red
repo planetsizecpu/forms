@@ -16,6 +16,7 @@ Red [
 		0.1.5 "04-08-2017"  "Added color to widgets while wait for request-colour dialog"
 		0.1.6 "06-09-2017"  "Added recode routine & save button, help of @rebolek on get values"
 		0.1.7 "07-09-2017"  "Added some widgets to list, save function enhanced with 'at' "
+		0.1.8 "11-09-2017"	"Added font definition to recode routine"
 	]
 ]
 
@@ -153,7 +154,7 @@ mainScreenSizeAdjust: does [
 FormFontChange: does [
 	FontSel: request-font 
 	FontDefName: FontSel/name 
-	either FontSel/style [FontDefStyl: to-string FontSel/style] [print "BAD FONT STYLE"]
+	either FontSel/style [FontDefStyl: to-string FontSel/style] [print "BAD FONT"]
 	FontDefSize: to-string FontSel/size 
 	FontGroupFontName/text: FontDefName
 	FontGroupFontStyl/text: FontDefStyl
@@ -197,27 +198,44 @@ Recode: does [
 	foreach Wgt FormSheetContent [
 		; Get widget values as word
 		Wgw: get to word! Wgt
-		; Set location
+		
+		; Set widget string
 		Widget: copy "at "
-		; Set offset
+		
 		Woffset: Wgw/offset
 		append Widget Woffset
 		append Widget " "
-		; Set name
+		
 		append Widget Wgt
 		append Widget " "
-		; Set type
+		
 		Wtype: Wgw/type
 		append Widget Wtype
 		append Widget " "
-		; Set size
+		
 		Wsize: Wgw/size
 		append Widget Wsize
 		append Widget " "
-		; Set color
+		
 		Wcolor: Wgw/color
 		append Widget Wcolor
 		append Widget " "
+		
+		Wft: copy "font [ "
+		append Wft "name: " 
+		append Wft dbl-quote
+		append Wft Wgw/font/name
+		append Wft dbl-quote
+		append Wft " "
+		append Wft "size: "
+		append Wft Wgw/font/size
+		append Wft " "
+		append Wft "style: '"
+		append Wft Wgw/font/style
+		append Wft "]"
+
+		append Widget Wft
+		
 		; Append widget to code block
 		append FormSheetRecodeBlock Widget
 	]
