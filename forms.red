@@ -17,6 +17,7 @@ Red [
 		0.1.6 "06-09-2017"  "Added recode routine & save button, help of @rebolek on get values"
 		0.1.7 "07-09-2017"  "Added some widgets to list, save function enhanced with 'at' "
 		0.1.8 "11-09-2017"	"Added font definition to recode routine"
+		0.1.9 "12-09-2017"	"Added widget name as text and recode routine"
 	]
 ]
 
@@ -178,9 +179,35 @@ FormSheetAddWidget: does [
 	; Add widget to content list
 	append FormSheetContent FormSheetStr
 	
-	; Make a dummy face to copy the pane from, and append to form sheet. Can't find other documented method
-	Dly: layout reduce [(FormSheetWidgetName) (FormSheetWidgetType) (WidgetGroupSize/data) 'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) [] 'loose ] 
+	; Compute this widget filler in some cases
+	either unset? 'FormSheetWidgetFiller [] [unset 'FormSheetWidgetFiller]
 	
+	; FormSheetWidgetFiller: copy []
+	switch FormSheetWidgetType [
+		area		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
+		base		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
+		box			[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
+		button		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
+		camera		[FormSheetWidgetFiller: ""] 
+		check		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
+		drop-down	[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
+		drop-list	[FormSheetWidgetFiller: ""] 
+		field		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
+		group-box	[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
+		image		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
+		panel		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
+		progress	[FormSheetWidgetFiller: ""] 
+		radio		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
+		slider		[FormSheetWidgetFiller: ""] 
+		tab-panel	[FormSheetWidgetFiller: to-block mold to-string FormSheetWidgetName] 
+		text		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
+		text-list	[FormSheetWidgetFiller: ""] 
+	]	
+	
+	; Make a dummy face to copy the pane from, and append to form sheet. Can't find other documented method
+	;Dly: layout reduce [(FormSheetWidgetName) (FormSheetWidgetType) (WidgetGroupSize/data) (FormSheetWidgetFiller)'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) [] 'loose ] 	
+	Dly: layout reduce [(FormSheetWidgetName) (FormSheetWidgetType) (WidgetGroupSize/data) (FormSheetWidgetFiller)'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) 'loose ] 	
+
 	; Create new widget into sheet by copying pane from dummy layout
 	append FormSheet/pane Dly/pane
 	
@@ -215,13 +242,24 @@ Recode: does [
 		
 		Wsize: Wgw/size
 		append Widget Wsize
-		append Widget " "
+		append Widget " "		
 		
 		Wcolor: Wgw/color
 		append Widget Wcolor
 		append Widget " "
 		
-		Wft: copy "font [ "
+		Wfiller: copy ""
+		switch/default Wtype [
+			tab-panel [
+				Wfiller: copy mold Wgw/data
+				append Widget Wfiller]
+		][
+			Wfiller: copy Wgw/text	
+			append Widget mold Wfiller
+		] 
+		append Widget " "
+		
+		Wft: copy "font ["
 		append Wft "name: " 
 		append Wft dbl-quote
 		append Wft Wgw/font/name
@@ -233,7 +271,6 @@ Recode: does [
 		append Wft "style: '"
 		append Wft Wgw/font/style
 		append Wft "]"
-
 		append Widget Wft
 		
 		; Append widget to code block
