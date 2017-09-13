@@ -37,13 +37,11 @@ ToolboxLowSize: as-pair ToolboxDefXsize (ToolboxDefYsize / 2)
 ToolboxWidgetList: ["area" "base" "box" "button" "camera" "check" "drop-down" "drop-list" "field" "group-box" "image" "panel" "progress" "radio" "slider" "tab-panel" "text" "text-list"]
 
 ; Font default values
-
 FontSel: attempt [make font! [name: "Consolas" size: 10 style: "normal"] ]
 FontDefName: "Consolas"
 FontDefStyl: "Normal"
 FontDefSize: "12"
 
-; Form sheet default values
 ; Form sheet default values
 FormSheetDefOrigin: 145x10
 FormSheetDefXsize: WindowDefXsize - (ToolboxDefXsize + 25)
