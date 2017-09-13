@@ -62,7 +62,7 @@ recodeScreen: layout [
 	title "Widget Recode Screen" 
 	size 500x300
 	below
-	text 480x15 left brick white "name: type: offset: size: color: "
+	text 480x15 left brick white "origin: name: type: size: color: text: font: "
 	RecodeList: text-list 480x250 data FormSheetRecodeBlock
 ]
 
