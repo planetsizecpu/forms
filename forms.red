@@ -205,7 +205,6 @@ FormSheetAddWidget: does [
 	]	
 	
 	; Make a dummy face to copy the pane from, and append to form sheet. Can't find other documented method
-	;Dly: layout reduce [(FormSheetWidgetName) (FormSheetWidgetType) (WidgetGroupSize/data) (FormSheetWidgetFiller)'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) [] 'loose ] 	
 	Dly: layout reduce [(FormSheetWidgetName) (FormSheetWidgetType) (WidgetGroupSize/data) (FormSheetWidgetFiller)'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) 'loose ] 	
 
 	; Create new widget into sheet by copying pane from dummy layout
