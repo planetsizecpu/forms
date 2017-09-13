@@ -57,9 +57,9 @@ FormSheetWidgetSize: 100x25
 FormSheetWidgetBackground: beige
 FormSheetWidgetForeground: blue
 
-; Widget recode screen layout
+; Widget re-code screen layout
 recodeScreen: layout [ 
-	title "Widget Recode Screen" 
+	title "Widget Code Screen" 
 	size 500x300
 	below
 	text 480x15 left brick white "origin: name: type: size: color: text: font: "
@@ -213,7 +213,7 @@ FormSheetAddWidget: does [
 	; Create new widget into sheet by copying pane from dummy layout
 	append FormSheet/pane Dly/pane
 	
-	; Recode all widgets
+	; Re-code all widgets
 	do Recode
 ]
 
