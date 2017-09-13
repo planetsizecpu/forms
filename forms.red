@@ -57,11 +57,11 @@ FormSheetWidgetForeground: blue
 
 ; Widget re-code screen layout
 recodeScreen: layout [ 
-	title "Widget Code Screen" 
-	size 500x300
+	title "Form Code Screen" 
+	size 700x200
 	below
-	text 480x15 left brick white "origin: name: type: size: color: text: font: "
-	RecodeList: text-list 480x250 data FormSheetRecodeBlock
+	text 680x15 left brick white "origin: name: type: size: color: text: font: "
+	RecodeList: text-list 680x250 data FormSheetRecodeBlock
 ]
 
 ;
@@ -182,7 +182,7 @@ FormSheetAddWidget: does [
 	; Compute this widget filler in some cases
 	either unset? 'FormSheetWidgetFiller [] [unset 'FormSheetWidgetFiller]
 	
-	; FormSheetWidgetFiller: copy []
+	; Set default widget filler
 	switch FormSheetWidgetType [
 		area		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		base		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
@@ -205,13 +205,25 @@ FormSheetAddWidget: does [
 	]	
 	
 	; Make a dummy face to copy the pane from, and append to form sheet. Can't find other documented method
-	Dly: layout reduce [(FormSheetWidgetName) (FormSheetWidgetType) (WidgetGroupSize/data) (FormSheetWidgetFiller)'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) 'loose ] 	
+	Dly: layout reduce [(FormSheetWidgetName) (FormSheetWidgetType) (WidgetGroupSize/data) (FormSheetWidgetFiller)
+		'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) 'loose 'on-alt-up [FormSheetModifyWidget (FormSheetWidgetName)]] 	
 
 	; Create new widget into sheet by copying pane from dummy layout
 	append FormSheet/pane Dly/pane
 	
+	; Delete widget default menu as we use right-click to modify 
+	do [Wgw: get to word! FormSheetWidgetName 
+		Wgw/menu: [] ]
+	
 	; Re-code all widgets
 	do Recode
+]
+
+; Form Sheet widget modification process
+FormSheetModifyWidget: func [Wgw] [
+	prin "TO BE MODIFYED: "
+	print Wgw
+
 ]
 
 ; Compute code block for save
