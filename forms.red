@@ -18,6 +18,7 @@ Red [
 		0.1.7 "07-09-2017"  "Added some widgets to list, save function enhanced with 'at' "
 		0.1.8 "11-09-2017"	"Added font definition to recode routine"
 		0.1.9 "12-09-2017"	"Added widget name as text and recode routine"
+		0.2.0 "13-09-2017"	"Initial font set to consolas"
 	]
 ]
 
@@ -36,16 +37,18 @@ ToolboxLowSize: as-pair ToolboxDefXsize (ToolboxDefYsize / 2)
 ToolboxWidgetList: ["area" "base" "box" "button" "camera" "check" "drop-down" "drop-list" "field" "group-box" "image" "panel" "progress" "radio" "slider" "tab-panel" "text" "text-list"]
 
 ; Font default values
-FontSel: ["Consolas" "normal" 10]
+
+FontSel: attempt [make font! [name: "Consolas" size: 10 style: "normal"] ]
 FontDefName: "Consolas"
 FontDefStyl: "Normal"
 FontDefSize: "12"
 
 ; Form sheet default values
-FormDefOrigin: 145x10
-FormDefXsize: WindowDefXsize - (ToolboxDefXsize + 25)
-FormDefYsize: WindowDefYsize - 25
-FormDefSize: as-pair FormDefXsize FormDefYsize
+; Form sheet default values
+FormSheetDefOrigin: 145x10
+FormSheetDefXsize: WindowDefXsize - (ToolboxDefXsize + 25)
+FormSheetDefYsize: WindowDefYsize - 25
+FormSheetDefSize: as-pair FormSheetDefXsize FormSheetDefYsize
 FormSheetStr: ""
 FormSheetCounter: 0
 FormSheetContent: []
@@ -77,7 +80,7 @@ mainScreen: layout [
 	InfoGroup: group-box ToolboxLowSize "Form Info" [
 		across
 		text 30x25 left bold "Size" 
-		InfoGroupFormSize: text 60x25 left bold data FormDefSize
+		InfoGroupFormSize: text 60x25 left bold data FormSheetDefSize
 		return
 		below
 		ContentButton: btn "Content/Recode" [Recode view recodeScreen]
@@ -116,8 +119,8 @@ mainScreen: layout [
 	button 120x20 red black bold "SAVE" [Recode write/lines request-file FormSheetRecodeBlock]
 	
 	; Form default design area
-	at FormDefOrigin
-	FormSheet: panel FormDefSize white blue cursor cross []
+	at FormSheetDefOrigin
+	FormSheet: panel FormSheetDefSize white blue cursor cross []
 	
 	; Catch window resizing and adjust form
 	on-resize [mainScreenSizeAdjust]	
@@ -142,20 +145,19 @@ mainScreenSizeAdjust: does [
 	WindowDefSize: as-pair WindowDefXsize WindowDefYsize
 	
 	; Compute new form size
-	FormDefXsize: WindowDefXsize - 150
-	FormDefYsize: WindowDefYsize - 20
-	FormDefSize: as-pair FormDefXsize FormDefYsize
+	FormSheetDefXsize: WindowDefXsize - 150
+	FormSheetDefYsize: WindowDefYsize - 20
+	FormSheetDefSize: as-pair FormSheetDefXsize FormSheetDefYsize
 
 	; Set new form size
-	FormSheet/size: FormDefSize
-	InfoGroupFormSize/text: to-string FormDefSize
+	FormSheet/size: FormSheetDefSize
+	InfoGroupFormSize/text: to-string FormSheetDefSize
 ]
 
 ; Font change behavior
 FormFontChange: does [
-	FontSel: request-font 
+	FontSel: attempt [make font! request-font]
 	FontDefName: FontSel/name 
-	either FontSel/style [FontDefStyl: to-string FontSel/style] [print "BAD FONT"]
 	FontDefSize: to-string FontSel/size 
 	FontGroupFontName/text: FontDefName
 	FontGroupFontStyl/text: FontDefStyl
