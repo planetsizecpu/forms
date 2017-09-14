@@ -19,6 +19,7 @@ Red [
 		0.1.8 "11-09-2017"	"Added font definition to recode routine"
 		0.1.9 "12-09-2017"	"Added widget name as text and recode routine"
 		0.2.0 "13-09-2017"	"Initial font set to consolas"
+		0.2.1 "14-09-2017"	"Added widget editing menu"
 	]
 ]
 
@@ -179,10 +180,8 @@ FormSheetAddWidget: does [
 	; Add widget to content list
 	append FormSheetContent FormSheetStr
 	
-	; Compute this widget filler in some cases
-	either unset? 'FormSheetWidgetFiller [] [unset 'FormSheetWidgetFiller]
-	
 	; Set default widget filler
+	either unset? 'FormSheetWidgetFiller [] [unset 'FormSheetWidgetFiller]
 	switch FormSheetWidgetType [
 		area		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		base		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
@@ -206,24 +205,30 @@ FormSheetAddWidget: does [
 	
 	; Make a dummy face to copy the pane from, and append to form sheet. Can't find other documented method
 	Dly: layout reduce [(FormSheetWidgetName) (FormSheetWidgetType) (WidgetGroupSize/data) (FormSheetWidgetFiller)
-		'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) 'loose 'on-alt-up [FormSheetModifyWidget (FormSheetWidgetName)]] 	
-
+		'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) 'loose] 		
+		
 	; Create new widget into sheet by copying pane from dummy layout
 	append FormSheet/pane Dly/pane
 	
-	; Delete widget default menu as we use right-click to modify 
-	do [Wgw: get to word! FormSheetWidgetName 
-		Wgw/menu: [] ]
-	
+	; Set widget editing options menu
+	Wgw: get to word! FormSheetWidgetName 
+	Wgw/menu: ["Size +" Size+ "Size -" Size- "Default" Default "Delete" Delete ]
+    Wgw/actors: make object! [
+    on-menu: func [face [object!] event [event!]][ 
+		switch event/picked [ Size+  [Wgw/size: add Wgw/size 10]
+                          Size-  [Wgw/size: subtract Wgw/size 10]
+                          Default [Wgw/size: WidgetGroupSize/data] 
+                          Delete [FormSheetDeleteWidget Wgw]            
+        ]]]
+		
 	; Re-code all widgets
 	do Recode
 ]
 
 ; Form Sheet widget modification process
-FormSheetModifyWidget: func [Wgw] [
-	prin "TO BE MODIFYED: "
+FormSheetDeleteWidget: func [Wgw] [
+	prin "TO BE DELETED: "
 	print Wgw
-
 ]
 
 ; Compute code block for save
