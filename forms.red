@@ -213,13 +213,13 @@ FormSheetAddWidget: does [
 	; Set widget editing options menu
 	Wgw: get to word! FormSheetWidgetName 
 	Wgw/menu: ["Size +" Size+ "Size -" Size- "Default" Default "Delete" Delete ]
-    Wgw/actors: make object! [
-    on-menu: func [face [object!] event [event!]][ 
-		switch event/picked [ Size+  [Wgw/size: add Wgw/size 10]
+	Wgw/actors: make object! [
+	on-menu: func [face [object!] event [event!]][ 
+	switch event/picked [ Size+  [Wgw/size: add Wgw/size 10]
                           Size-  [Wgw/size: subtract Wgw/size 10]
                           Default [Wgw/size: WidgetGroupSize/data] 
                           Delete [FormSheetDeleteWidget Wgw]            
-        ]]]
+						  ]]]
 		
 	; Re-code all widgets
 	do Recode
