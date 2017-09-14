@@ -35,7 +35,8 @@ ToolboxDefYsize: 300
 ToolboxBigSize: as-pair ToolboxDefXsize ToolboxDefYsize
 ToolboxMidSize: as-pair ToolboxDefXsize (ToolboxDefYsize / 1.5)
 ToolboxLowSize: as-pair ToolboxDefXsize (ToolboxDefYsize / 2)
-ToolboxWidgetList: ["area" "base" "box" "button" "camera" "check" "drop-down" "drop-list" "field" "group-box" "image" "panel" "progress" "radio" "slider" "tab-panel" "text" "text-list"]
+ToolboxWidgetList: ["area" "base" "box" "button" "camera" "check" "drop-down" "drop-list" "field" 
+					"group-box" "image" "panel" "progress" "radio" "slider" "tab-panel" "text" "text-list"]
 
 ; Font default values
 FontSel: attempt [make font! [name: "Consolas" size: 10 style: "normal"] ]
