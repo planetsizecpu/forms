@@ -226,10 +226,16 @@ FormSheetAddWidget: does [
 	do Recode
 ]
 
-; Form Sheet widget modification process
+; Form Sheet widget deletion process
 FormSheetDeleteWidget: func [Wgw] [
+
 	prin "TO BE DELETED: "
-	print Wgw
+	print Wgw/text
+	print "Must delete the face from FormSheet"
+	print "Must delete the widget from FormSheetContent"
+	
+	; Re-code all widgets
+	do Recode
 ]
 
 ; Compute code block for save
