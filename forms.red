@@ -216,10 +216,10 @@ FormSheetAddWidget: does [
 	Wgw/menu: ["Size +" Size+ "Size -" Size- "Default" Default "Delete" Delete ]
 	Wgw/actors: make object! [
 	on-menu: func [face [object!] event [event!]][ 
-	switch event/picked [ Size+  [face/size: add face/size 10]
-                          Size-  [face/size: subtract face/size 10]
-                          Default [face/size: WidgetGroupSize/data] 
-                          Delete [FormSheetDeleteWidget Wgw]            
+	switch event/picked [ Size+  [face/size: add face/size 10 Recode]
+                          Size-  [face/size: subtract face/size 10 Recode]
+                          Default [face/size: WidgetGroupSize/data Recode] 
+                          Delete [FormSheetDeleteWidget Wgw Recode]            
 						  ]]]
 		
 	; Re-code all widgets
@@ -233,9 +233,7 @@ FormSheetDeleteWidget: func [Wgw] [
 	print Wgw/text
 	print "Must delete the face from FormSheet"
 	print "Must delete the widget from FormSheetContent"
-	
-	; Re-code all widgets
-	do Recode
+
 ]
 
 ; Compute code block for save
