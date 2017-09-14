@@ -216,9 +216,9 @@ FormSheetAddWidget: does [
 	Wgw/menu: ["Size +" Size+ "Size -" Size- "Default" Default "Delete" Delete ]
 	Wgw/actors: make object! [
 	on-menu: func [face [object!] event [event!]][ 
-	switch event/picked [ Size+  [Wgw/size: add Wgw/size 10]
-                          Size-  [Wgw/size: subtract Wgw/size 10]
-                          Default [Wgw/size: WidgetGroupSize/data] 
+	switch event/picked [ Size+  [face/size: add face/size 10]
+                          Size-  [face/size: subtract face/size 10]
+                          Default [face/size: WidgetGroupSize/data] 
                           Delete [FormSheetDeleteWidget Wgw]            
 						  ]]]
 		
