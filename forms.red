@@ -164,7 +164,7 @@ FormFontChange: does [
 	FontGroupFontSize/text: FontDefSize
 ]
 
-; Form Sheet widget adition process
+; Form Sheet widget addition process
 FormSheetAddWidget: does [
 	
 	; Compute widget name 
