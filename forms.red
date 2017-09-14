@@ -62,7 +62,7 @@ recodeScreen: layout [
 	title "Form Code Screen" 
 	size 700x200
 	below
-	text 680x15 left brick white "origin: name: type: size: color: text: font: "
+	text 680x15 left brick white "origin: name: type: size: bgcolor: fgcolor: text: font: "
 	RecodeList: text-list 680x250 data FormSheetRecodeBlock
 ]
 
