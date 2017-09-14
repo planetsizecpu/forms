@@ -19,7 +19,7 @@ Red [
 		0.1.8 "11-09-2017"	"Added font definition to recode routine"
 		0.1.9 "12-09-2017"	"Added widget name as text and recode routine"
 		0.2.0 "13-09-2017"	"Initial font set to consolas"
-		0.2.1 "14-09-2017"	"Added widget editing menu"
+		0.2.1 "14-09-2017"	"Help of @dockimbel to add widget editing menu"
 	]
 ]
 
@@ -216,7 +216,7 @@ FormSheetAddWidget: does [
 	Wgw/menu: ["Size +" Size+ "Size -" Size- "Default" Default "Delete" Delete ]
 	Wgw/actors: make object! [
 	on-menu: func [face [object!] event [event!]][ 
-	switch event/picked [ Size+  [print face/text set-focus get to word! face/text Wgw/size: add Wgw/size 10]
+	switch event/picked [ Size+  [Wgw/size: add Wgw/size 10]
                           Size-  [Wgw/size: subtract Wgw/size 10]
                           Default [Wgw/size: WidgetGroupSize/data] 
                           Delete [FormSheetDeleteWidget Wgw]            
@@ -262,6 +262,10 @@ Recode: does [
 		append Widget " "		
 		
 		Wcolor: Wgw/color
+		append Widget Wcolor
+		append Widget " "
+		
+		Wcolor: Wgw/font/color
 		append Widget Wcolor
 		append Widget " "
 		
