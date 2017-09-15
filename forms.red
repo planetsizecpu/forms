@@ -20,6 +20,7 @@ Red [
 		0.1.9 "12-09-2017"	"Added widget name as text and recode routine"
 		0.2.0 "13-09-2017"	"Initial font set to consolas"
 		0.2.1 "14-09-2017"	"Help of @dockimbel to add widget editing menu"
+		0.2.2 "15-09-2017"	"Delete widget function"
 	]
 ]
 
@@ -219,7 +220,7 @@ FormSheetAddWidget: does [
 	switch event/picked [ Size+  [face/size: add face/size 10 Recode]
                           Size-  [face/size: subtract face/size 10 Recode]
                           Default [face/size: WidgetGroupSize/data Recode] 
-                          Delete [FormSheetDeleteWidget Wgw Recode]            
+                          Delete [FormSheetDeleteWidget copy face/text dump-face face]            
 						  ]]]
 		
 	; Re-code all widgets
@@ -227,13 +228,21 @@ FormSheetAddWidget: does [
 ]
 
 ; Form Sheet widget deletion process
-FormSheetDeleteWidget: func [Wgw] [
+FormSheetDeleteWidget: func [Wnm] [
 
-	prin "TO BE DELETED: "
-	print Wgw/text
-	print "Must delete the face from FormSheet"
-	print "Must delete the widget from FormSheetContent"
-
+	; Set widget name
+	append Wnm ":"	
+	prin "TO BE DELETED: " 
+	print Wnm
+	
+	; Delete widget from content list
+	alter FormSheetContent Wnm
+	
+	; Delete widget from global context
+	if [face? to-word Wnm] [unset to-word Wnm]
+	
+	; Delete widget form FormSheet panel
+	print "Don't know how to delete widget"
 ]
 
 ; Compute code block for save
