@@ -220,7 +220,7 @@ FormSheetAddWidget: does [
 	switch event/picked [ Size+  [face/size: add face/size 10 Recode]
                           Size-  [face/size: subtract face/size 10 Recode]
                           Default [face/size: WidgetGroupSize/data Recode] 
-                          Delete [FormSheetDeleteWidget copy face/text dump-face face]            
+                          Delete [FormSheetDeleteWidget copy face/text remove face/parent/pane]            
 						  ]]]
 		
 	; Re-code all widgets
@@ -241,8 +241,6 @@ FormSheetDeleteWidget: func [Wnm] [
 	; Delete widget from global context
 	if [face? to-word Wnm] [unset to-word Wnm]
 	
-	; Delete widget form FormSheet panel
-	print "Don't know how to delete widget"
 ]
 
 ; Compute code block for save
