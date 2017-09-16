@@ -20,7 +20,8 @@ Red [
 		0.1.9 "12-09-2017"	"Added widget name as text and recode routine"
 		0.2.0 "13-09-2017"	"Initial font set to consolas"
 		0.2.1 "14-09-2017"	"Help of @dockimbel to add widget editing menu"
-		0.2.2 "15-09-2017"	"Delete widget function"
+		0.2.2 "15-09-2017"	"Delete widget menu function"
+		0.2.3 "16-09-2017"	"Default wigdet menu functions"
 	]
 ]
 
@@ -39,12 +40,6 @@ ToolboxLowSize: as-pair ToolboxDefXsize (ToolboxDefYsize / 2)
 ToolboxWidgetList: ["area" "base" "box" "button" "camera" "check" "drop-down" "drop-list" "field" 
 					"group-box" "image" "panel" "progress" "radio" "slider" "tab-panel" "text" "text-list"]
 
-; Font default values
-FontSel: attempt [make font! [name: "Consolas" size: 10 style: "normal"] ]
-FontDefName: "Consolas"
-FontDefStyl: "Normal"
-FontDefSize: "12"
-
 ; Form sheet default values
 FormSheetDefOrigin: 145x10
 FormSheetDefXsize: WindowDefXsize - (ToolboxDefXsize + 25)
@@ -57,6 +52,13 @@ FormSheetRecodeBlock: []
 FormSheetWidgetSize: 100x25
 FormSheetWidgetBackground: beige
 FormSheetWidgetForeground: blue
+
+; Font default values
+FontSel: attempt [make font! [name: "Consolas" size: 10 style: "normal" color:FormSheetWidgetForeground ] ]
+FontDefName: "Consolas"
+FontDefStyl: "Normal"
+FontDefSize: "12"
+
 
 ; Widget re-code screen layout
 recodeScreen: layout [ 
@@ -158,6 +160,7 @@ mainScreenSizeAdjust: does [
 ; Font change behavior
 FormFontChange: does [
 	FontSel: attempt [make font! request-font]
+	FontSel/color: FormSheetWidgetForeground
 	FontDefName: FontSel/name 
 	FontDefSize: to-string FontSel/size 
 	FontGroupFontName/text: FontDefName
@@ -214,13 +217,16 @@ FormSheetAddWidget: does [
 	
 	; Set widget editing options menu
 	Wgw: get to word! FormSheetWidgetName 
-	Wgw/menu: ["Size +" Size+ "Size -" Size- "Default" Default "Delete" Delete ]
+	Wgw/menu: ["Size  +" Size+ "Size  -" Size- "Default Size" Defsize "Default Font" Deffont "Default Color" Defcolor
+				"Remove" Removwgt]
 	Wgw/actors: make object! [
 	on-menu: func [face [object!] event [event!]][ 
 	switch event/picked [ Size+  [face/size: add face/size 10 Recode]
                           Size-  [face/size: subtract face/size 10 Recode]
-                          Default [face/size: WidgetGroupSize/data Recode] 
-                          Delete [FormSheetDeleteWidget copy face/text remove face/parent/pane]            
+                          Defsize [face/size: WidgetGroupSize/data Recode] 
+						  Deffont [face/font: copy FontSel Recode]
+						  Defcolor [face/color: FormSheetWidgetBackground face/font/color: FormSheetWidgetForeground]
+                          Removwgt [FormSheetDeleteWidget copy face/text remove find face/parent/pane face Recode]            
 						  ]]]
 		
 	; Re-code all widgets
@@ -232,8 +238,6 @@ FormSheetDeleteWidget: func [Wnm] [
 
 	; Set widget name
 	append Wnm ":"	
-	prin "TO BE DELETED: " 
-	print Wnm
 	
 	; Delete widget from content list
 	alter FormSheetContent Wnm
