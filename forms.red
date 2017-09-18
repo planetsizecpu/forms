@@ -218,25 +218,28 @@ FormSheetAddWidget: does [
 	; Set widget editing options menu
 	Wgw: get to word! FormSheetWidgetName 
 	Wgw/menu: ["Size  +" Size+ "Size  -" Size- "Default Size" Defsize "Default Font" Deffont "Default Color" Defcolor
-				"Remove" Removwgt]
-	Wgw/actors: make object! [
-	on-menu: func [face [object!] event [event!]][ 
-	switch event/picked [ Size+  [face/size: add face/size 10 Recode]
+				"Remove" Removewt]
+	; Create actor for on-menu
+	Wgw/actors: make object! [on-menu: func [face [object!] event [event!]][ 
+		switch event/picked [ Size+  [face/size: add face/size 10 Recode]
                           Size-  [face/size: subtract face/size 10 Recode]
                           Defsize [face/size: WidgetGroupSize/data Recode] 
 						  Deffont [face/font: copy FontSel Recode]
 						  Defcolor [face/color: FormSheetWidgetBackground face/font/color: FormSheetWidgetForeground]
-                          Removwgt [FormSheetDeleteWidget copy face/text remove find face/parent/pane face Recode]            
-						  ]]]
-		
+                          Removewt [FormSheetDeleteWidget face]            
+						  ]
+		]
+	]
+	
 	; Re-code all widgets
 	do Recode
 ]
 
 ; Form Sheet widget deletion process
-FormSheetDeleteWidget: func [Wnm] [
+FormSheetDeleteWidget: func [face [object!]][
 
 	; Set widget name
+	Wnm: copy face/text
 	append Wnm ":"	
 	
 	; Delete widget from content list
@@ -245,6 +248,11 @@ FormSheetDeleteWidget: func [Wnm] [
 	; Delete widget from global context
 	if [face? to-word Wnm] [unset to-word Wnm]
 	
+	; Delete widget from form sheet
+	remove find face/parent/pane face
+	
+	; Re-code all widgets
+	Recode
 ]
 
 ; Compute code block for save
