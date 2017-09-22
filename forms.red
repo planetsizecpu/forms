@@ -38,7 +38,7 @@ ToolboxBigSize: as-pair ToolboxDefXsize ToolboxDefYsize
 ToolboxMidSize: as-pair ToolboxDefXsize (ToolboxDefYsize / 1.5)
 ToolboxLowSize: as-pair ToolboxDefXsize (ToolboxDefYsize / 2)
 ToolboxWidgetList: ["area" "base" "box" "button" "camera" "check" "drop-down" "drop-list" "field" 
-					"group-box" "image" "panel" "progress" "radio" "slider" "tab-panel" "text" "text-list"]
+			"group-box" "image" "panel" "progress" "radio" "slider" "tab-panel" "text" "text-list"]
 
 ; Form sheet default values
 FormSheetDefOrigin: 145x10
@@ -218,7 +218,7 @@ FormSheetAddWidget: does [
 	; Set widget editing options menu
 	Wgw: get to word! FormSheetWidgetName 
 	Wgw/menu: ["Size  +" Size+ "Size  -" Size- "Default Size" Defsize "Default Font" Deffont "Default Color" Defcolor
-				"Clone" Clonewt "Remove" Removewt]
+				"Remove" Removewt]
 				
 	; Create actor for on-menu
 	Wgw/actors: make object! [on-menu: func [face [object!] event [event!]][ 
@@ -227,8 +227,7 @@ FormSheetAddWidget: does [
                           Defsize [face/size: WidgetGroupSize/data Recode] 
 						  Deffont [face/font: copy FontSel Recode]
 						  Defcolor [face/color: FormSheetWidgetBackground face/font/color: FormSheetWidgetForeground]
-						  Clonewt [FormSheetCloneWidget face]
-                          Removewt [FormSheetDeleteWidget face]            
+						  Removewt [FormSheetDeleteWidget face]            
 						  ]
 		]
 	]
@@ -255,32 +254,6 @@ FormSheetDeleteWidget: func [face [object!]][
 	
 	; Re-code all widgets
 	Recode
-]
-
-; Form Sheet widget clone
-FormSheetCloneWidget: func [face [object!]][
-	
-	; Compute clon widget name 
-	FormSheetStr: null
-	FormSheetStr: copy to-string face/type
-	FormSheetCounter: add FormSheetCounter 1
-	append FormSheetStr to-string FormSheetCounter
-	Wgw: copy FormSheetStr
-	append Wgw ":"
-	
-	; Add widget to content list
-	append FormSheetContent Wgw
-	
-	; Copy face to a new named word
-	set to-word (FormSheetStr) copy face
-	
-	; Modify values
-	Wgw: copy ""
-	Wgw: get to word! (FormSheetStr)
-	Wgw/text: copy FormSheetStr
-	Wgw/offset: add Wgw/offset 25
-	
-	print FormSheetContent
 ]
 
 ; Compute code block for save
