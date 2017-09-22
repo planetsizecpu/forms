@@ -168,7 +168,7 @@ FormFontChange: does [
 	FontGroupFontSize/text: FontDefSize
 ]
 
-; Form Sheet widget addition process
+; Form Sheet widget addition
 FormSheetAddWidget: does [
 	
 	; Compute widget name 
@@ -208,17 +208,18 @@ FormSheetAddWidget: does [
 		text-list	[FormSheetWidgetFiller: ""] 
 	]	
 	
-	; Make a dummy face to copy the pane from, and append to form sheet. Can't find other documented method
+	; Make a dummy face to create the pane
 	Dly: layout reduce [(FormSheetWidgetName) (FormSheetWidgetType) (WidgetGroupSize/data) (FormSheetWidgetFiller)
 		'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) 'loose] 		
 		
-	; Create new widget into sheet by copying pane from dummy layout
+	; Create new widget into sheet using the pane from dummy layout
 	append FormSheet/pane Dly/pane
 	
 	; Set widget editing options menu
 	Wgw: get to word! FormSheetWidgetName 
 	Wgw/menu: ["Size  +" Size+ "Size  -" Size- "Default Size" Defsize "Default Font" Deffont "Default Color" Defcolor
-				"Remove" Removewt]
+				"Clone" Clonewt "Remove" Removewt]
+				
 	; Create actor for on-menu
 	Wgw/actors: make object! [on-menu: func [face [object!] event [event!]][ 
 		switch event/picked [ Size+  [face/size: add face/size 10 Recode]
@@ -226,6 +227,7 @@ FormSheetAddWidget: does [
                           Defsize [face/size: WidgetGroupSize/data Recode] 
 						  Deffont [face/font: copy FontSel Recode]
 						  Defcolor [face/color: FormSheetWidgetBackground face/font/color: FormSheetWidgetForeground]
+						  Clonewt [FormSheetCloneWidget face]
                           Removewt [FormSheetDeleteWidget face]            
 						  ]
 		]
@@ -235,7 +237,7 @@ FormSheetAddWidget: does [
 	do Recode
 ]
 
-; Form Sheet widget deletion process
+; Form Sheet widget deletion
 FormSheetDeleteWidget: func [face [object!]][
 
 	; Set widget name
@@ -253,6 +255,32 @@ FormSheetDeleteWidget: func [face [object!]][
 	
 	; Re-code all widgets
 	Recode
+]
+
+; Form Sheet widget clone
+FormSheetCloneWidget: func [face [object!]][
+	
+	; Compute clon widget name 
+	FormSheetStr: null
+	FormSheetStr: copy to-string face/type
+	FormSheetCounter: add FormSheetCounter 1
+	append FormSheetStr to-string FormSheetCounter
+	Wgw: copy FormSheetStr
+	append Wgw ":"
+	
+	; Add widget to content list
+	append FormSheetContent Wgw
+	
+	; Copy face to a new named word
+	set to-word (FormSheetStr) copy face
+	
+	; Modify values
+	Wgw: copy ""
+	Wgw: get to word! (FormSheetStr)
+	Wgw/text: copy FormSheetStr
+	Wgw/offset: add Wgw/offset 25
+	
+	print FormSheetContent
 ]
 
 ; Compute code block for save
