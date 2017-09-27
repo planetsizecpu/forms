@@ -22,7 +22,7 @@ Red [
 		0.2.1 "14-09-2017"	"Help of @dockimbel to add widget editing menu"
 		0.2.2 "15-09-2017"	"Delete widget menu function"
 		0.2.3 "16-09-2017"	"Default wigdet menu functions"
-		0.2.4 "27-09-2017"  "Widget deletion adjustments"
+		0.2.4 "27-09-2017"	"Widget deletion adjustments"
 	]
 ]
 
@@ -242,10 +242,9 @@ FormSheetAddWidget: does [
 ; Form Sheet widget deletion
 FormSheetDeleteWidget: func [face [object!]][
 
-	; Set widget name
+	; Set widget name (here would help face/name field)
 	either none? face/text [Wnm: to-string face/data] [Wnm: face/text]
 	append Wnm ":"	
-	print wnm
 	
 	; Delete widget from content list
 	alter FormSheetContent Wnm
