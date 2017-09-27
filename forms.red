@@ -22,6 +22,7 @@ Red [
 		0.2.1 "14-09-2017"	"Help of @dockimbel to add widget editing menu"
 		0.2.2 "15-09-2017"	"Delete widget menu function"
 		0.2.3 "16-09-2017"	"Default wigdet menu functions"
+		0.2.4 "27-09-2017"  "Widget deletion adjustments"
 	]
 ]
 
@@ -58,7 +59,6 @@ FontSel: attempt [make font! [name: "Consolas" size: 10 style: "normal" color:Fo
 FontDefName: "Consolas"
 FontDefStyl: "Normal"
 FontDefSize: "12"
-
 
 ; Widget re-code screen layout
 recodeScreen: layout [ 
@@ -185,27 +185,27 @@ FormSheetAddWidget: does [
 	; Add widget to content list
 	append FormSheetContent FormSheetStr
 	
-	; Set default widget filler
+	; Set default widget filler text
 	either unset? 'FormSheetWidgetFiller [] [unset 'FormSheetWidgetFiller]
 	switch FormSheetWidgetType [
 		area		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		base		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		box			[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		button		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
-		camera		[FormSheetWidgetFiller: ""] 
+		camera		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		check		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		drop-down	[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
-		drop-list	[FormSheetWidgetFiller: ""] 
+		drop-list	[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		field		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		group-box	[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		image		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		panel		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
-		progress	[FormSheetWidgetFiller: ""] 
+		progress	[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		radio		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
-		slider		[FormSheetWidgetFiller: ""] 
+		slider		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		tab-panel	[FormSheetWidgetFiller: to-block mold to-string FormSheetWidgetName] 
 		text		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
-		text-list	[FormSheetWidgetFiller: ""] 
+		text-list	[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 	]	
 	
 	; Make a dummy face to create the pane
@@ -219,7 +219,10 @@ FormSheetAddWidget: does [
 	Wgw: get to word! FormSheetWidgetName 
 	Wgw/menu: ["Size  +" Size+ "Size  -" Size- "Default Size" Defsize "Default Font" Deffont "Default Color" Defcolor
 				"Remove" Removewt]
-				
+
+	; Set widget text if none
+	;if none? Wgw/text [Wgw/text: head to-string FormSheetWidgetName]
+	
 	; Create actor for on-menu
 	Wgw/actors: make object! [on-menu: func [face [object!] event [event!]][ 
 		switch event/picked [ Size+  [face/size: add face/size 10 Recode]
@@ -240,8 +243,9 @@ FormSheetAddWidget: does [
 FormSheetDeleteWidget: func [face [object!]][
 
 	; Set widget name
-	Wnm: copy face/text
+	either none? face/text [Wnm: to-string face/data] [Wnm: face/text]
 	append Wnm ":"	
+	print wnm
 	
 	; Delete widget from content list
 	alter FormSheetContent Wnm
