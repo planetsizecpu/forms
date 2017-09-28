@@ -219,9 +219,6 @@ FormSheetAddWidget: does [
 	Wgw: get to word! FormSheetWidgetName 
 	Wgw/menu: ["Size  +" Size+ "Size  -" Size- "Default Size" Defsize "Default Font" Deffont "Default Color" Defcolor
 				"Remove" Removewt]
-
-	; Set widget text if none
-	;if none? Wgw/text [Wgw/text: head to-string FormSheetWidgetName]
 	
 	; Create actor for on-menu
 	Wgw/actors: make object! [on-menu: func [face [object!] event [event!]][ 
