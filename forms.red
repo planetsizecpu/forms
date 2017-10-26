@@ -24,6 +24,7 @@ Red [
 		0.2.3 "16-09-2017"	"Default wigdet menu functions"
 		0.2.4 "27-09-2017"	"Widget deletion adjustments"
 		0.2.5 "20-10-2017"	"Did some code cleaning"
+		0.2.6 "26-10-2017"  "Help of @greggirwin/@honix with request-color func, click on color boxes"
 	]
 ]
 
@@ -70,6 +71,36 @@ recodeScreen: layout [
 	RecodeList: text-list 680x250 data FormSheetRecodeBlock
 ]
 
+; Request color func by @greggirwin/@honix help while red has its own built-in
+set 'request-color func [
+		/size sz [pair!]
+		/title titl [string!]
+		/local palette res dn?
+	][
+		sz: any [sz 150x150]
+		palette: make image! sz
+		draw palette compose [
+			pen off
+			fill-pen linear red orange yellow green aqua blue purple
+			box 0x0 (sz)
+			fill-pen linear white transparent black 0x0 (as-pair 0 sz/y)
+			box 0x0 (sz)
+		]
+		view/flags compose [
+			title (any [ titl ""])
+			; The mouse down check here is because the window may pop up directly
+			; over the mouse, and get focus. Hence, it gets a mouse up event, even
+			; though they didn't mouse down on the color palette.
+			image palette on-down [dn?: true] on-up [
+				if dn? [
+					res: pick palette event/offset
+					unview
+				]
+			]
+		][modal popup] ; no-buttons
+	res
+]
+
 ;
 ; Main screen layout
 ;
@@ -97,8 +128,8 @@ mainScreen: layout [
 		WidgetGroupSize: field 70x20 data FormSheetWidgetSize
 		return
 		across
-		WidgetGroupFgn: box 25x25 FormSheetWidgetForeground
-		WidgetGroupBgn: box 25x25 FormSheetWidgetBackground
+		WidgetGroupFgn: box 25x25 FormSheetWidgetForeground [FormSheetWidgetForeground: WidgetGroupFgn/color: request-color]
+		WidgetGroupBgn: box 25x25 FormSheetWidgetBackground [FormSheetWidgetBackground: WidgetGroupBgn/color: request-color]
 		return
 		below
 		WidgetGroupList: text-list data ToolboxWidgetList select 1
