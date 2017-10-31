@@ -25,6 +25,7 @@ Red [
 		0.2.4 "27-09-2017"	"Widget deletion adjustments"
 		0.2.5 "20-10-2017"	"Did some code cleaning"
 		0.2.6 "26-10-2017"	"Help of @greggirwin/@honix with request-color func, click on color boxes"
+		0.2.7 "31-10-2017"	"Added size to recode block"
 	]
 ]
 
@@ -293,6 +294,11 @@ Recode: does [
 	
 	; Init recode block
 	clear FormSheetRecodeBlock
+	
+	; Set window size
+	Widget: copy "size "
+	append Widget WindowDefSize
+	append FormSheetRecodeBlock Widget
 	
 	; Compute each widget on content list
 	foreach Wgt FormSheetContent [
