@@ -26,6 +26,7 @@ Red [
 		0.2.5 "20-10-2017"	"Did some code cleaning"
 		0.2.6 "26-10-2017"	"Help of @greggirwin/@honix with request-color func, click on color boxes"
 		0.2.7 "31-10-2017"	"Added size to recode block"
+		0.2.8 "08-12-2017"	"Updated tab-panel filler block content"
 	]
 ]
 
@@ -236,7 +237,7 @@ FormSheetAddWidget: does [
 		progress	[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		radio		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		slider		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
-		tab-panel	[FormSheetWidgetFiller: to-block mold to-string FormSheetWidgetName] 
+		tab-panel	[FormSheetWidgetFiller: reduce [ to-string (FormSheetWidgetName) [] ] ] 
 		text		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		text-list	[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 	]	
