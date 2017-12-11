@@ -27,6 +27,7 @@ Red [
 		0.2.6 "26-10-2017"	"Help of @greggirwin/@honix with request-color func, click on color boxes"
 		0.2.7 "31-10-2017"	"Added size to recode block"
 		0.2.8 "08-12-2017"	"Updated tab-panel filler block content"
+		0.2.9 "11-12-2017"	"Updated recode function for tab-panel filler block content"
 	]
 ]
 
@@ -335,7 +336,7 @@ Recode: does [
 		Wfiller: copy ""
 		switch/default Wtype [
 			tab-panel [
-				Wfiller: copy mold Wgw/data
+				Wfiller: copy mold reduce [ Wgt [] ]
 				append Widget Wfiller]
 		][
 			Wfiller: copy Wgw/text	
