@@ -253,7 +253,7 @@ FormSheetAddWidget: does [
 	; Set widget editing options menu
 	Wgw: get to word! FormSheetWidgetName 
 	Wgw/menu: ["Size  +" Size+ "Size  -" Size- "Default Size" Defsize "Default Font" Deffont "Default Color" Defcolor
-	          "Remove" Removewt]
+	          "Delete" Deletewt]
 	
 	; Create actor for on-menu
 	Wgw/actors: make object! [on-menu: func [face [object!] event [event!]]
@@ -262,7 +262,7 @@ FormSheetAddWidget: does [
 							Defsize [face/size: WidgetGroupSize/data Recode] 
 							Deffont [face/font: copy FontSel Recode]
 							Defcolor [face/color: FormSheetWidgetBackground face/font/color: FormSheetWidgetForeground]
-							Removewt [FormSheetDeleteWidget face]            
+							Deletewt [FormSheetDeleteWidget face]            
 							]
 		]
 	]
