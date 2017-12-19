@@ -5,7 +5,7 @@ Red [
 	Version: Under Development see below
 	Needs:	 'View
 	Usage:  {
-		Use for form scripts generation, save result then copy&paste code
+		Use for form scripts generation, save result then copy&paste or load code
 	}
 	History: [
 		0.1.0 "22-08-2017"	"Start of work."
@@ -28,6 +28,7 @@ Red [
 		0.2.7 "31-10-2017"	"Added size to recode block"
 		0.2.8 "08-12-2017"	"Updated tab-panel filler block content"
 		0.2.9 "11-12-2017"	"Updated recode function for tab-panel filler block content"
+		0.3.0 "19-12-2017"	"Added scroller widget type (unavalaible) & some comments"
 	]
 ]
 
@@ -35,7 +36,7 @@ Red [
 WindowDefXsize: 1024
 WindowDefYsize: 768
 WindowDefSize: as-pair WindowDefXsize WindowDefYsize
-WindowMinSize: 200x200
+WindowMinSize: 640x480
 
 ; Toolboxes default values
 ToolboxDefXsize: 125
@@ -44,7 +45,7 @@ ToolboxBigSize: as-pair ToolboxDefXsize ToolboxDefYsize
 ToolboxMidSize: as-pair ToolboxDefXsize (ToolboxDefYsize / 1.5)
 ToolboxLowSize: as-pair ToolboxDefXsize (ToolboxDefYsize / 2)
 ToolboxWidgetList: ["area" "base" "box" "button" "camera" "check" "drop-down" "drop-list" "field" 
-			"group-box" "image" "panel" "progress" "radio" "slider" "tab-panel" "text" "text-list"]
+			"group-box" "image" "panel" "progress" "radio" "scroller" "slider" "tab-panel" "text" "text-list"]
 
 ; Form sheet default values
 FormSheetDefOrigin: 145x10
@@ -91,9 +92,6 @@ set 'request-color func [
 		]
 		view/flags compose [
 			title (any [ titl ""])
-			; The mouse down check here is because the window may pop up directly
-			; over the mouse, and get focus. Hence, it gets a mouse up event, even
-			; though they didn't mouse down on the color palette.
 			image palette on-down [dn?: true] on-up [
 				if dn? [
 					res: pick palette event/offset
@@ -220,7 +218,7 @@ FormSheetAddWidget: does [
 	; Add widget to content list
 	append FormSheetContent FormSheetStr
 	
-	; Set default widget filler text
+	; Set default widget filler text for each widget type (we want individual control)
 	either unset? 'FormSheetWidgetFiller [] [unset 'FormSheetWidgetFiller]
 	switch FormSheetWidgetType [
 		area		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
@@ -238,6 +236,7 @@ FormSheetAddWidget: does [
 		progress	[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		radio		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		slider		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
+		scroller	[FormSheetWidgetFiller: to-string FormSheetWidgetName] 		
 		tab-panel	[FormSheetWidgetFiller: reduce [ to-string (FormSheetWidgetName) [] ] ] 
 		text		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		text-list	[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
@@ -274,7 +273,7 @@ FormSheetAddWidget: does [
 ; Form Sheet widget deletion
 FormSheetDeleteWidget: func [face [object!]][
 
-	; Set widget name (here would help face/name field)
+	; Set widget name (here would help face/name attribute)
 	either none? face/text [Wnm: to-string face/data] [Wnm: face/text]
 	append Wnm ":"	
 	
@@ -299,7 +298,7 @@ Recode: does [
 	
 	; Set window size
 	Widget: copy "size "
-	append Widget WindowDefSize
+	append Widget FormSheetDefSize
 	append FormSheetRecodeBlock Widget
 	
 	; Compute each widget on content list
