@@ -1,5 +1,8 @@
 # forms
 Forms design pratice
 
-This is a form design pratice I do to learn red languaje, it generates VID code from the 
-designed form sheet. By their complexity, at this moment we cannot embed objects in containers
+This is a form design pratice I did to learn red next-gen languaje, it simply generates VID code from the 
+designed form sheet, saving some time in design and locate widgets.
+
+Red language is an open source project made by Full Stack Technologies @ www.red-lang.org
+
