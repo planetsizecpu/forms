@@ -34,7 +34,7 @@ Red [
 
 ; Window default values
 WindowDefXsize: 1024
-WindowDefYsize: 768
+WindowDefYsize: 800
 WindowDefSize: as-pair WindowDefXsize WindowDefYsize
 WindowMinSize: 640x480
 
@@ -49,8 +49,8 @@ ToolboxWidgetList: ["area" "base" "box" "button" "camera" "check" "drop-down" "d
 
 ; Form sheet default values
 FormSheetDefOrigin: 145x10
-FormSheetDefXsize: WindowDefXsize - (ToolboxDefXsize + 25)
-FormSheetDefYsize: WindowDefYsize - 25
+FormSheetDefXsize: WindowDefXsize - (ToolboxDefXsize + 20)
+FormSheetDefYsize: WindowDefYsize - 20
 FormSheetDefSize: as-pair FormSheetDefXsize FormSheetDefYsize
 FormSheetStr: ""
 FormSheetCounter: 0
@@ -65,6 +65,12 @@ FontSel: attempt [make font! [name: "Consolas" size: 10 style: "normal" color:Fo
 FontDefName: "Consolas"
 FontDefStyl: "Normal"
 FontDefSize: "12"
+
+; Editor default values
+EditorDefOrigin: as-pair 145 (FormSheetDefYsize - 100)
+EditorDefXsize: FormSheetDefXsize
+EditorDefYsize: ToolboxDefYsize
+EditorDefSize: as-pair EditorDefXsize EditorDefYsize
 
 ; Widget re-code screen layout
 recodeScreen: layout [ 
@@ -120,6 +126,7 @@ mainScreen: layout [
 		return
 		below
 		ContentButton: btn "Content/Recode" [Recode view recodeScreen]
+		SaveContentButton: btn "Save Content" [Recode write/lines request-file FormSheetRecodeBlock]
 	]
 	
 	; Toolbox Widget list
@@ -151,12 +158,21 @@ mainScreen: layout [
 		return
 	]
 	
-	; Save button
-	button 120x20 red black bold "SAVE" [Recode write/lines request-file FormSheetRecodeBlock]
+	; Editor Toolbox
+	EditorGroup: group-box ToolboxLowSize "Source" [
+		below 
+		CloneButton: btn "Paste Content" [CloneWidgets]
+		RunButton: btn "Run" [do to-block EditorArea/text]
+		SaveSourceButton: btn "Save Source" [write request-file EditorArea/text]
+	]
 	
 	; Form default design area
 	at FormSheetDefOrigin
 	FormSheet: panel FormSheetDefSize white blue cursor cross []
+	
+	; Editing area
+	at EditorDefOrigin
+	EditorArea: area EditorDefSize blue white loose 
 	
 	; Catch window resizing and adjust form
 	on-resize [mainScreenSizeAdjust]	
@@ -180,14 +196,33 @@ mainScreenSizeAdjust: does [
 	WindowDefYsize: FormSheet/parent/size/y 
 	WindowDefSize: as-pair WindowDefXsize WindowDefYsize
 	
-	; Compute new form size
-	FormSheetDefXsize: WindowDefXsize - 150
-	FormSheetDefYsize: WindowDefYsize - 20
+	; Compute new form size leaving room for toolboxes on left & right sides
+	FormSheetDefXsize: WindowDefXsize - ToolboxDefXsize - ToolboxDefXsize
+	FormSheetDefYsize: WindowDefYsize - 200
 	FormSheetDefSize: as-pair FormSheetDefXsize FormSheetDefYsize
 
+	; Compute new editor location
+	EditorDefOrigin: as-pair 145 (FormSheetDefYsize + 20)
+	
 	; Set new form size
 	FormSheet/size: FormSheetDefSize
 	InfoGroupFormSize/text: to-string FormSheetDefSize
+	
+	; Set new editor location
+	EditorArea/offset: EditorDefOrigin
+	
+]
+
+; Clone content in editor area
+CloneWidgets: does [
+	Recode
+	EditorArea/text: "Red [ Needs: 'View ]" 
+	append EditorArea/text newline
+	append EditorArea/text "view ["
+	append EditorArea/text newline
+	foreach x FormSheetRecodeBlock [append EditorArea/text newline append EditorArea/text x]
+	append EditorArea/text newline 
+	append EditorArea/text "]"
 ]
 
 ; Font change behavior
