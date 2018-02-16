@@ -69,7 +69,7 @@ FontDefSize: "12"
 ; Editor default values
 EditorDefOrigin: as-pair 145 (FormSheetDefYsize - 100)
 EditorDefXsize: FormSheetDefXsize
-EditorDefYsize: ToolboxDefYsize
+EditorDefYsize: ToolboxDefYsize - 120
 EditorDefSize: as-pair EditorDefXsize EditorDefYsize
 
 ; Widget re-code screen layout
@@ -210,16 +210,18 @@ mainScreenSizeAdjust: does [
 	
 	; Set new editor location
 	EditorArea/offset: EditorDefOrigin
+	EditorDefXsize: FormSheetDefXsize
+	EditorDefSize: as-pair EditorDefXsize EditorDefYsize
+	EditorArea/size: EditorDefSize
 	
 ]
 
 ; Clone content in editor area
 CloneWidgets: does [
 	Recode
-	EditorArea/text: "Red [ Needs: 'View ]" 
+	EditorArea/text: copy "Red [ Needs: 'View ]" 
 	append EditorArea/text newline
 	append EditorArea/text "view ["
-	append EditorArea/text newline
 	foreach x FormSheetRecodeBlock [append EditorArea/text newline append EditorArea/text x]
 	append EditorArea/text newline 
 	append EditorArea/text "]"
