@@ -29,6 +29,7 @@ Red [
 		0.2.8 "08-12-2017"	"Updated tab-panel filler block content"
 		0.2.9 "11-12-2017"	"Updated recode function for tab-panel filler block content"
 		0.3.0 "19-12-2017"	"Added scroller widget type (unavalaible) & some comments"
+		0.3.1 "19-02-2018"	"Added source editor & related options"
 	]
 ]
 
