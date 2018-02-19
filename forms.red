@@ -126,7 +126,7 @@ mainScreen: layout [
 		return
 		below
 		ContentButton: btn "Content/Recode" [Recode view recodeScreen]
-		SaveContentButton: btn "Save Content" [Recode write/lines request-file FormSheetRecodeBlock]
+		; SaveContentButton: btn "Save Content" [Recode write/lines request-file FormSheetRecodeBlock]
 	]
 	
 	; Toolbox Widget list
@@ -172,7 +172,7 @@ mainScreen: layout [
 	
 	; Editing area
 	at EditorDefOrigin
-	EditorArea: area EditorDefSize blue white loose 
+	EditorArea: area EditorDefSize blue white 
 	
 	; Catch window resizing and adjust form
 	on-resize [mainScreenSizeAdjust]	
@@ -216,7 +216,7 @@ mainScreenSizeAdjust: does [
 	
 ]
 
-; Clone content in editor area
+; Clone content to editor area
 CloneWidgets: does [
 	Recode
 	EditorArea/text: copy "Red [ Needs: 'View ]" 
@@ -297,7 +297,7 @@ FormSheetAddWidget: does [
 							Size-  [face/size: subtract face/size 10 Recode]
 							Defsize [face/size: WidgetGroupSize/data Recode] 
 							Deffont [face/font: copy FontSel Recode]
-							Defcolor [face/color: FormSheetWidgetBackground face/font/color: FormSheetWidgetForeground]
+							Defcolor [FormSheetSetDefcolor face]
 							Deletewt [FormSheetDeleteWidget face]            
 							]
 		]
@@ -325,6 +325,11 @@ FormSheetDeleteWidget: func [face [object!]][
 	
 	; Re-code all widgets
 	Recode
+]
+
+; Set widget to default color
+FormSheetSetDefcolor: func [face [object!]][
+	face/color: FormSheetWidgetBackground face/font/color: FormSheetWidgetForeground
 ]
 
 ; Compute code block for save
