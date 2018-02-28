@@ -411,4 +411,4 @@ Recode: does [
 ;
 ; Run code
 ;
-view/flags mainScreen [resize]
+view/flags/no-wait mainScreen [resize]
