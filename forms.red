@@ -154,16 +154,15 @@ mainScreen: layout [
 		FontGroupFontSize: text bold 30x15 FontDefSize
 		return
 		below
-		FontGroupFontBtn: btn bold "Font" [FormFontChange]
+		FontGroupFontBtn: btn bold "Font" [attempt [FormFontChange]]
 		return
 	]
 	
 	; Editor Toolbox
 	EditorGroup: group-box ToolboxLowSize "Source" [
 		below 
-		; CloneButton: btn "Paste Content" [Recode CloneWidgets]
-		RunButton: btn "Run" [attempt [do to-block EditorArea/text]]
-		SaveSourceButton: btn "Save Source" [write request-file EditorArea/text]
+		RunButton: btn "Run" [Recode attempt [do to-block EditorArea/text]]
+		SaveSourceButton: btn "Save Source" [Recode write request-file EditorArea/text]
 	]
 	
 	; Form default design area
@@ -380,6 +379,9 @@ Recode: does [
 			tab-panel [
 				Wfiller: copy mold reduce [ Wgt [] ]
 				append Widget Wfiller]
+			text [Wfiller: copy Wgw/text append Widget mold Wfiller
+					Wfiller: " para [align: 'center v-align: 'middle]"	
+					append Widget Wfiller]
 		][
 			Wfiller: copy Wgw/text	
 			append Widget mold Wfiller
