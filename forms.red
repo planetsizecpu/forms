@@ -57,8 +57,8 @@ FormSheetStr: ""
 FormSheetCounter: 0
 FormSheetContent: []
 FormSheetRecodeBlock: []
-FormSheetWidgetSize: 100x25
-FormSheetWidgetBackground: beige
+FormSheetWidgetSize: 300x250
+FormSheetWidgetBackground: orange
 FormSheetWidgetForeground: blue
 
 ; Font default values
@@ -126,8 +126,7 @@ mainScreen: layout [
 		InfoGroupFormSize: text 60x25 left bold data FormSheetDefSize
 		return
 		below
-		ContentButton: btn "Content/Recode" [Recode view recodeScreen]
-		; SaveContentButton: btn "Save Content" [Recode write/lines request-file FormSheetRecodeBlock]
+		ContentButton: btn "Content" [Recode view recodeScreen]
 	]
 	
 	; Toolbox Widget list
@@ -162,8 +161,8 @@ mainScreen: layout [
 	; Editor Toolbox
 	EditorGroup: group-box ToolboxLowSize "Source" [
 		below 
-		CloneButton: btn "Paste Content" [CloneWidgets]
-		RunButton: btn "Run" [do to-block EditorArea/text]
+		; CloneButton: btn "Paste Content" [Recode CloneWidgets]
+		RunButton: btn "Run" [attempt [do to-block EditorArea/text]]
 		SaveSourceButton: btn "Save Source" [write request-file EditorArea/text]
 	]
 	
@@ -215,11 +214,12 @@ mainScreenSizeAdjust: does [
 	EditorDefSize: as-pair EditorDefXsize EditorDefYsize
 	EditorArea/size: EditorDefSize
 	
+	Recode
+	
 ]
 
 ; Clone content to editor area
-CloneWidgets: does [
-	Recode
+PasteWidgets: does [
 	EditorArea/text: copy "Red [ Needs: 'View ]" 
 	append EditorArea/text newline
 	append EditorArea/text "view ["
@@ -298,14 +298,14 @@ FormSheetAddWidget: does [
 							Size-  [face/size: subtract face/size 10 Recode]
 							Defsize [face/size: WidgetGroupSize/data Recode] 
 							Deffont [face/font: copy FontSel Recode]
-							Defcolor [FormSheetSetDefcolor face]
-							Deletewt [FormSheetDeleteWidget face]            
+							Defcolor [FormSheetSetDefcolor face Recode]
+							Deletewt [FormSheetDeleteWidget face Recode]            
 							]
 		]
 	]
 	
 	; Re-code all widgets
-	do Recode
+	Recode
 ]
 
 ; Form Sheet widget deletion
@@ -403,6 +403,7 @@ Recode: does [
 		; Append widget to code block
 		append FormSheetRecodeBlock Widget
 	]
+	PasteWidgets
 ]
 
 ;
