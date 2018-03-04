@@ -303,6 +303,9 @@ FormSheetAddWidget: does [
 		]
 	]
 	
+	; Set widget offset
+	Wgw/offset: 25x25
+	
 	; Re-code all widgets
 	Recode
 ]
