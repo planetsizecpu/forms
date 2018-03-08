@@ -49,8 +49,10 @@ ToolboxWidgetList: ["area" "base" "box" "button" "camera" "check" "drop-down" "d
 			"group-box" "image" "panel" "progress" "radio" "scroller" "slider" "tab-panel" "text" "text-list"]
 
 ; Form sheet default values
-FormSheetDefOrigin: 145x10
-FormSheetDefXsize: WindowDefXsize - (ToolboxDefXsize + 20)
+FormSheetDefXorigin: 145
+FormSheetDefYorigin: 10
+FormSheetDefOrigin: as-pair FormSheetDefXorigin FormSheetDefYorigin
+FormSheetDefXsize: WindowDefXsize - (ToolboxDefXsize * 2.3)
 FormSheetDefYsize: WindowDefYsize - 20
 FormSheetDefSize: as-pair FormSheetDefXsize FormSheetDefYsize
 FormSheetStr: ""
@@ -72,6 +74,13 @@ EditorDefOrigin: as-pair 145 (FormSheetDefYsize - 100)
 EditorDefXsize: FormSheetDefXsize
 EditorDefYsize: ToolboxDefYsize - 120
 EditorDefSize: as-pair EditorDefXsize EditorDefYsize
+
+; MySql default values
+MySqlDefOrigin: as-pair (WindowDefXsize - (ToolboxDefXsize + 10)) FormSheetDefYorigin
+MySqlDefXsize: FormSheetDefXsize
+MySqlDefYsize: ToolboxDefYsize - 120
+MySqlDefSize: as-pair MysqlDefXsize MysqlDefYsize
+
 
 ; Widget re-code screen layout
 recodeScreen: layout [ 
@@ -172,6 +181,14 @@ mainScreen: layout [
 	; Editing area
 	at EditorDefOrigin
 	EditorArea: area EditorDefSize blue white 
+
+	at MySqlDefOrigin
+	; MySql Toolbox
+	MySqlToolGroup: group-box ToolboxBigSize "MySql" [
+		below
+		MySqlButton: btn "Connect"
+		text "Waiting Red 0.7"
+	]
 	
 	; Catch window resizing and adjust form
 	on-resize [mainScreenSizeAdjust]	
@@ -196,7 +213,7 @@ mainScreenSizeAdjust: does [
 	WindowDefSize: as-pair WindowDefXsize WindowDefYsize
 	
 	; Compute new form size leaving room for toolboxes on left & right sides
-	FormSheetDefXsize: WindowDefXsize - ToolboxDefXsize - ToolboxDefXsize
+	FormSheetDefXsize: WindowDefXsize - (ToolboxDefXsize * 2.3)
 	FormSheetDefYsize: WindowDefYsize - 200
 	FormSheetDefSize: as-pair FormSheetDefXsize FormSheetDefYsize
 
@@ -213,6 +230,9 @@ mainScreenSizeAdjust: does [
 	EditorDefSize: as-pair EditorDefXsize EditorDefYsize
 	EditorArea/size: EditorDefSize
 	
+	; Set new MySql toolbox location
+	MySqlDefOrigin: as-pair (WindowDefXsize - (ToolboxDefXsize + 10)) FormSheetDefYorigin
+	MySqlToolGroup/offset: MySqlDefOrigin	
 	Recode
 	
 ]
