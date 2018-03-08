@@ -126,7 +126,7 @@ mainScreen: layout [
 		InfoGroupFormSize: text 60x25 left bold data FormSheetDefSize
 		return
 		below
-		ContentButton: btn "Content" [Recode view recodeScreen]
+		; ContentButton: btn "Content" [Recode view recodeScreen]
 	]
 	
 	; Toolbox Widget list
@@ -217,12 +217,12 @@ mainScreenSizeAdjust: does [
 	
 ]
 
-; Clone content to editor area
+; Clone content in editor area
 PasteWidgets: does [
 	EditorArea/text: copy "Red [ Needs: 'View ]" 
 	append EditorArea/text newline
 	append EditorArea/text "view ["
-	foreach x FormSheetRecodeBlock [append EditorArea/text newline append EditorArea/text x]
+	foreach Wgt FormSheetRecodeBlock [append EditorArea/text newline append EditorArea/text Wgt]
 	append EditorArea/text newline 
 	append EditorArea/text "]"
 ]
