@@ -30,6 +30,7 @@ Red [
 		0.2.9 "11-12-2017"	"Updated recode function for tab-panel filler block content"
 		0.3.0 "19-12-2017"	"Added scroller widget type (unavalaible) & some comments"
 		0.3.1 "19-02-2018"	"Added source editor & related options"
+		0.3.2 "15-03-2018"	"Add Recode on drag&drop to widget actor"
 	]
 ]
 
@@ -301,7 +302,7 @@ FormSheetAddWidget: does [
 	
 	; Make a dummy face to create the pane
 	Dly: layout reduce [(FormSheetWidgetName) (FormSheetWidgetType) (WidgetGroupSize/data) (FormSheetWidgetFiller)
-		'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) 'loose] 		
+		'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) 'loose ] 		
 		
 	; Create new widget into sheet using the pane from dummy layout
 	append FormSheet/pane Dly/pane
@@ -321,6 +322,7 @@ FormSheetAddWidget: does [
 							Deletewt [FormSheetDeleteWidget face Recode]            
 							]
 		]
+		on-drop: func [][Recode]
 	]
 	
 	; Set widget offset
