@@ -187,8 +187,6 @@ mainScreen: layout [
 	; MySql Toolbox
 	MySqlToolGroup: group-box ToolboxBigSize "MySql" [
 		below
-		MySqlButton: btn "Connect"
-		text "Waiting Red 0.7"
 	]
 	
 	; Catch window resizing and adjust form
