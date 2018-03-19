@@ -76,11 +76,11 @@ EditorDefXsize: FormSheetDefXsize
 EditorDefYsize: ToolboxDefYsize - 120
 EditorDefSize: as-pair EditorDefXsize EditorDefYsize
 
-; MySql default values
-MySqlDefOrigin: as-pair (WindowDefXsize - (ToolboxDefXsize + 10)) FormSheetDefYorigin
-MySqlDefXsize: FormSheetDefXsize
-MySqlDefYsize: ToolboxDefYsize - 120
-MySqlDefSize: as-pair MysqlDefXsize MysqlDefYsize
+; SQL Database default values
+DbSqlDefOrigin: as-pair (WindowDefXsize - (ToolboxDefXsize + 10)) FormSheetDefYorigin
+DbSqlDefXsize: FormSheetDefXsize
+DbSqlDefYsize: ToolboxDefYsize - 120
+DbSqlDefSize: as-pair DbSqlDefXsize DbSqlDefYsize
 
 
 ; Widget re-code screen layout
@@ -183,9 +183,9 @@ mainScreen: layout [
 	at EditorDefOrigin
 	EditorArea: area EditorDefSize blue white 
 
-	at MySqlDefOrigin
-	; MySql Toolbox
-	MySqlToolGroup: group-box ToolboxBigSize "MySql" [
+	at DbSqlDefOrigin
+	; Database sql Toolbox
+	DbSqlToolGroup: group-box ToolboxBigSize "Database" [
 		below
 	]
 	
@@ -229,9 +229,9 @@ mainScreenSizeAdjust: does [
 	EditorDefSize: as-pair EditorDefXsize EditorDefYsize
 	EditorArea/size: EditorDefSize
 	
-	; Set new MySql toolbox location
-	MySqlDefOrigin: as-pair (WindowDefXsize - (ToolboxDefXsize + 10)) FormSheetDefYorigin
-	MySqlToolGroup/offset: MySqlDefOrigin	
+	; Set new database sql toolbox location
+	DbSqlDefOrigin: as-pair (WindowDefXsize - (ToolboxDefXsize + 10)) FormSheetDefYorigin
+	DbSqlToolGroup/offset: DbSqlDefOrigin	
 	Recode
 	
 ]
