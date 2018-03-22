@@ -184,8 +184,8 @@ mainScreen: layout [
 	at EditorDefOrigin
 	EditorArea: area EditorDefSize blue white 
 
-	at DbDefOrigin
 	; Database Toolbox
+	at DbDefOrigin
 	DbToolGroup: group-box ToolboxBigSize "Database" [
 		below
 	]
@@ -233,8 +233,8 @@ mainScreenSizeAdjust: does [
 	; Set new database toolbox location
 	DbDefOrigin: as-pair (WindowDefXsize - (ToolboxDefXsize + 10)) FormSheetDefYorigin
 	DbToolGroup/offset: DbDefOrigin	
-	Recode
 	
+	Recode
 ]
 
 ; Clone content in editor area
@@ -432,6 +432,8 @@ Recode: does [
 		; Append widget to code block
 		append FormSheetRecodeBlock Widget
 	]
+	
+	; Clone widgets in editor
 	PasteWidgets
 ]
 
