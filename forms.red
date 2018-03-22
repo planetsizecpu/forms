@@ -31,6 +31,7 @@ Red [
 		0.3.0 "19-12-2017"	"Added scroller widget type (unavalaible) & some comments"
 		0.3.1 "19-02-2018"	"Added source editor & related options"
 		0.3.2 "15-03-2018"	"Add Recode on drag&drop to widget actor"
+		0.3.3 "22-03-2018"	"Widgets menu cleaning"
 	]
 ]
 
@@ -76,11 +77,11 @@ EditorDefXsize: FormSheetDefXsize
 EditorDefYsize: ToolboxDefYsize - 120
 EditorDefSize: as-pair EditorDefXsize EditorDefYsize
 
-; SQL Database default values
-DbSqlDefOrigin: as-pair (WindowDefXsize - (ToolboxDefXsize + 10)) FormSheetDefYorigin
-DbSqlDefXsize: FormSheetDefXsize
-DbSqlDefYsize: ToolboxDefYsize - 120
-DbSqlDefSize: as-pair DbSqlDefXsize DbSqlDefYsize
+; Database default values
+DbDefOrigin: as-pair (WindowDefXsize - (ToolboxDefXsize + 10)) FormSheetDefYorigin
+DbDefXsize: FormSheetDefXsize
+DbDefYsize: ToolboxDefYsize - 120
+DbDefSize: as-pair DbDefXsize DbDefYsize
 
 
 ; Widget re-code screen layout
@@ -172,7 +173,7 @@ mainScreen: layout [
 	EditorGroup: group-box ToolboxLowSize "Source" [
 		below 
 		RunButton: btn "Run" [Recode attempt [do to-block EditorArea/text]]
-		SaveSourceButton: btn "Save Source" [Recode write request-file EditorArea/text]
+		SaveSourceButton: btn "Save" [Recode write request-file EditorArea/text]
 	]
 	
 	; Form default design area
@@ -183,9 +184,9 @@ mainScreen: layout [
 	at EditorDefOrigin
 	EditorArea: area EditorDefSize blue white 
 
-	at DbSqlDefOrigin
-	; Database sql Toolbox
-	DbSqlToolGroup: group-box ToolboxBigSize "Database" [
+	at DbDefOrigin
+	; Database Toolbox
+	DbToolGroup: group-box ToolboxBigSize "Database" [
 		below
 	]
 	
@@ -229,9 +230,9 @@ mainScreenSizeAdjust: does [
 	EditorDefSize: as-pair EditorDefXsize EditorDefYsize
 	EditorArea/size: EditorDefSize
 	
-	; Set new database sql toolbox location
-	DbSqlDefOrigin: as-pair (WindowDefXsize - (ToolboxDefXsize + 10)) FormSheetDefYorigin
-	DbSqlToolGroup/offset: DbSqlDefOrigin	
+	; Set new database toolbox location
+	DbDefOrigin: as-pair (WindowDefXsize - (ToolboxDefXsize + 10)) FormSheetDefYorigin
+	DbToolGroup/offset: DbDefOrigin	
 	Recode
 	
 ]
@@ -316,8 +317,8 @@ FormSheetAddWidget: does [
 							Size-  [face/size: subtract face/size 10 Recode]
 							Defsize [face/size: WidgetGroupSize/data Recode] 
 							Deffont [face/font: copy FontSel Recode]
-							Defcolor [FormSheetSetDefcolor face Recode]
-							Deletewt [FormSheetDeleteWidget face Recode]            
+							Defcolor [FormSheetSetDefcolor face]
+							Deletewt [FormSheetDeleteWidget face]            
 							]
 		]
 		on-drop: func [][Recode]
@@ -353,6 +354,9 @@ FormSheetDeleteWidget: func [face [object!]][
 ; Set widget to default color
 FormSheetSetDefcolor: func [face [object!]][
 	face/color: FormSheetWidgetBackground face/font/color: FormSheetWidgetForeground
+	
+	; Re-code all widgets
+	Recode
 ]
 
 ; Compute code block for save
