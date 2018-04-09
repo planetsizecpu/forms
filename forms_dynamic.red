@@ -151,13 +151,13 @@ mainScreen: layout [
 	
 	; Editing area
 	at StaticDefOrigin
-	EditorStatic: area EditorDefSize 200.200.200 yellow
+	EditorStatic: area EditorDefSize 250.240.240 yellow
 	at DynamicDefOrigin
 	EditorDynamic: area EditorDefSize blue white " "
 
 	; Database Toolbox
 	at DbDefOrigin
-	DbToolGroup: group-box ToolboxBigSize "Database" [
+	DbToolGroup: group-box ToolboxBigSize " " [
 		below
 	]
 	
@@ -272,7 +272,7 @@ FormSheetAddWidget: does [
 	
 	; Make a dummy face to create the pane
 	Dly: layout reduce [(FormSheetWidgetName) (FormSheetWidgetType) (WidgetGroupSize/data) (FormSheetWidgetFiller)
-		'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) 'loose 'on-resize [print "*** RESIZE ***"]]		
+		'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) 'loose ]		
 		
 	; Create new widget into sheet using the pane from dummy layout
 	append FormSheet/pane Dly/pane
@@ -293,12 +293,10 @@ FormSheetAddWidget: does [
 							]
 		]
 		on-drop: func [][Recode]
-		on-resize: func [f e][foreach-face f [if select face/actors 'on-resize [face/actors/on-resize face e]]]
 	]
 	
 	; Set widget offset
 	Wgw/offset: 25x25
-	Wgw/flags: [resize]
 	
 	; Re-code all widgets
 	Recode
@@ -332,7 +330,7 @@ FormSheetSetDefcolor: func [face [object!]][
 	Recode
 ]
 
-; Compute code block for save
+; Compute static code for save
 Recode: does [
 	
 	; Init recode block
