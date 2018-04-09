@@ -292,9 +292,9 @@ FormSheetAddWidget: does [
 							Deletewt [FormSheetDeleteWidget face]            
 							]
 		]
-		on-drop: func [][Recode]
+		on-drop: func [face [object!]][Recode face/selected: true]
 	]
-	
+		
 	; Set widget offset
 	Wgw/offset: 25x25
 	
