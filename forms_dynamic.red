@@ -138,7 +138,7 @@ mainScreen: layout [
 		return
 	]
 	
-	; Editor Toolbox
+	; Toolbox editor
 	EditorGroup: group-box ToolboxLowSize "Source" [
 		below 
 		RunButton: btn "Run" [Recode attempt [SourceRun]]
@@ -292,6 +292,7 @@ FormSheetAddWidget: does [
 							Deletewt [FormSheetDeleteWidget face]            
 							]
 		]
+		; There is a buggy code because some widgets can't be selected, such as "base"
 		on-drop: func [face [object!]][Recode face/selected: true]
 	]
 		
