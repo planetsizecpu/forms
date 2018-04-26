@@ -292,8 +292,8 @@ FormSheetAddWidget: does [
 							Deletewt [FormSheetDeleteWidget face]            
 							]
 		]
-		; There is a buggy code because some widgets can't be selected, such as "base"
-		on-drop: func [face [object!]][Recode face/selected: true]
+		; There is a buggy code because the face lose focus after Recode 
+		on-drop: func [face [object!]][Recode]
 	]
 		
 	; Set widget offset
@@ -419,10 +419,11 @@ PasteWidgets: does [
 	append EditorStatic/text "]"
 	append EditorStatic/text newline
 
-	; Arrange user code to run after formsheet
+	; Arrange user code to run
 	Usercode: copy EditorDynamic/text
 	append Usercode newline
 	append Usercode "do Usercode"
+	append Usercode "halt"
 ]
 
 ; Source run on screen
