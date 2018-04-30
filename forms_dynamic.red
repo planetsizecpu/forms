@@ -9,7 +9,8 @@ Red [
 	}
 	History: [
 		0.1.0 "22-08-2017"	"Start of work."
-		0.3.4 "26-03-2017"	"Source editor split"
+		0.3.4 "26-03-2018"	"Source editor split"
+		0.3.5 "30-04-2018"	"Dynamic code arrangement"
 	]
 ]
 
@@ -405,12 +406,7 @@ Recode: does [
 		append FormSheetRecodeBlock Widget
 	]
 	
-	; Clone widgets in editor
-	PasteWidgets
-]
-
-; Clone content in editor area
-PasteWidgets: does [
+	; Clone content in static editor area
 	EditorStatic/text: copy "Red [ Needs: 'View ]" 
 	append EditorStatic/text newline
 	append EditorStatic/text "view/no-wait ["
@@ -418,36 +414,27 @@ PasteWidgets: does [
 	append EditorStatic/text newline 
 	append EditorStatic/text "]"
 	append EditorStatic/text newline
-
-	; Arrange user code to run
-	Usercode: copy EditorDynamic/text
-	append Usercode newline
-	append Usercode "do Usercode"
-	append Usercode "halt"
-]
-
-; Source run on screen
-SourceRun: does [
-	Globalcode: EditorStatic/text
-	append Globalcode "Usercode: does ["
+	
+	; Arrange global code
+	Globalcode: copy EditorStatic/text
+	append Globalcode newline
+	append Globalcode "DynamicCode: does ["
 	append Globalcode newline
 	append Globalcode EditorDynamic/text
 	append Globalcode "]"
 	append Globalcode newline
-	append Globalcode "do Usercode"
+	append Globalcode "do DynamicCode"
+	append Globalcode newline
+	append Globalcode "halt"
+]
+
+; Source run on screen 
+SourceRun: does [
 	do to-block Globalcode
 ]
 
 ; Source save to file
 SourceSave: does [
-	Globalcode: EditorStatic/text
-	append Globalcode newline
-	append Globalcode "Usercode: does ["
-	append Globalcode newline
-	append Globalcode EditorDynamic/text
-	append Globalcode "]"
-	append Globalcode newline
-	append Globalcode "do Usercode"
 	SourceFile: request-file 
 	either none? SourceFile [][
 		Recode write SourceFile Globalcode
