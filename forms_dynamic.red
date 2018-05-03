@@ -294,7 +294,7 @@ FormSheetAddWidget: does [
 							]
 		]
 		; There is a buggy code because the face lose focus after Recode 
-		on-drop: func [face [object!]][Recode]
+		on-drop: func [face [object!]][Recode show face]
 	]
 		
 	; Set widget offset
