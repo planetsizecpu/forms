@@ -32,7 +32,7 @@ Red [
 		0.3.1 "19-02-2018"	"Added source editor & related options"
 		0.3.2 "15-03-2018"	"Add Recode on drag&drop to widget actor"
 		0.3.3 "22-03-2018"	"Widgets menu cleaning"
-	]
+		0.3.4 "30-07-2018"	"Fixed font size typo"
 ]
 
 ; Window default values
@@ -66,7 +66,7 @@ FormSheetWidgetBackground: orange
 FormSheetWidgetForeground: blue
 
 ; Font default values
-FontSel: attempt [make font! [name: "Consolas" size: 10 style: "normal" color:FormSheetWidgetForeground ] ]
+FontSel: attempt [make font! [name: "Consolas" size: 12 style: "normal" color:FormSheetWidgetForeground ] ]
 FontDefName: "Consolas"
 FontDefStyl: "Normal"
 FontDefSize: "12"

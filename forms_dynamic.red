@@ -1,7 +1,7 @@
 Red [	
 	Title:   "RED Forms Generator"
 	Author:  "PlanetSizeCpu"
-	File: 	 %forms.red
+	File: 	 %forms_dynamic.red
 	Version: Under Development see below
 	Needs:	 'View
 	Usage:  {
@@ -11,6 +11,7 @@ Red [
 		0.1.0 "22-08-2017"	"Start of work."
 		0.3.4 "26-03-2018"	"Source editor split"
 		0.3.5 "30-04-2018"	"Dynamic code arrangement"
+		0.3.6 "30-07-2018"	"Fixed font size typo"
 	]
 ]
 
@@ -45,7 +46,7 @@ FormSheetWidgetBackground: orange
 FormSheetWidgetForeground: blue
 
 ; Font default values
-FontSel: attempt [make font! [name: "Consolas" size: 10 style: "normal" color:FormSheetWidgetForeground ] ]
+FontSel: attempt [make font! [name: "Consolas" size: 12 style: "normal" color:FormSheetWidgetForeground ] ]
 FontDefName: "Consolas"
 FontDefStyl: "Normal"
 FontDefSize: "12"
