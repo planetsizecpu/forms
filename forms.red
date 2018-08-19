@@ -1,7 +1,7 @@
 Red [	
 	Title:   "RED Forms Generator"
 	Author:  "PlanetSizeCpu"
-	File: 	 %forms.red
+	File: 	 %forms_dynamic.red
 	Version: Under Development see below
 	Needs:	 'View
 	Usage:  {
@@ -9,30 +9,11 @@ Red [
 	}
 	History: [
 		0.1.0 "22-08-2017"	"Start of work."
-		0.1.1 "25-08-2017"	"Help of @rebolek to add form behavior on window resizing"
-		0.1.2 "28-08-2017"	"FontGroup upgrade to request-font, added resize flag"
-		0.1.3 "29-08-2017"	"Insert widget button, recode list button & actions"
-		0.1.4 "01-08-2017"	"Widget insertion process start"
-		0.1.5 "04-08-2017"	"Added color to widgets while wait for request-colour dialog"
-		0.1.6 "06-09-2017"	"Added recode routine & save button, help of @rebolek on get values"
-		0.1.7 "07-09-2017"	"Added some widgets to list, save function enhanced with 'at' "
-		0.1.8 "11-09-2017"	"Added font definition to recode routine"
-		0.1.9 "12-09-2017"	"Added widget name as text and recode routine"
-		0.2.0 "13-09-2017"	"Initial font set to consolas"
-		0.2.1 "14-09-2017"	"Help of @dockimbel to add widget editing menu"
-		0.2.2 "15-09-2017"	"Delete widget menu function"
-		0.2.3 "16-09-2017"	"Default wigdet menu functions"
-		0.2.4 "27-09-2017"	"Widget deletion adjustments"
-		0.2.5 "20-10-2017"	"Did some code cleaning"
-		0.2.6 "26-10-2017"	"Help of @greggirwin/@honix with request-color func, click on color boxes"
-		0.2.7 "31-10-2017"	"Added size to recode block"
-		0.2.8 "08-12-2017"	"Updated tab-panel filler block content"
-		0.2.9 "11-12-2017"	"Updated recode function for tab-panel filler block content"
-		0.3.0 "19-12-2017"	"Added scroller widget type (unavalaible) & some comments"
-		0.3.1 "19-02-2018"	"Added source editor & related options"
-		0.3.2 "15-03-2018"	"Add Recode on drag&drop to widget actor"
-		0.3.3 "22-03-2018"	"Widgets menu cleaning"
-		0.3.4 "30-07-2018"	"Fixed font size typo"
+		0.3.4 "26-03-2018"	"Source editor split"
+		0.3.5 "30-04-2018"	"Dynamic code arrangement"
+		0.3.6 "30-07-2018"	"Fixed font size typo"
+		0.3.7 "19-08-2018"	"Fixed on-drop issue"
+	]
 ]
 
 ; Window default values
@@ -72,26 +53,18 @@ FontDefStyl: "Normal"
 FontDefSize: "12"
 
 ; Editor default values
-EditorDefOrigin: as-pair 145 (FormSheetDefYsize - 100)
-EditorDefXsize: FormSheetDefXsize
-EditorDefYsize: ToolboxDefYsize - 120
+EditorDefXsize: (FormSheetDefXsize / 2) - 5
+EditorDefYsize: (WindowDefYsize - FormSheetDefYsize) - 20
 EditorDefSize: as-pair EditorDefXsize EditorDefYsize
+StaticDefOrigin: as-pair FormSheetDefXorigin (FormSheetDefYorigin + FormSheetDefYsize + 5)
+DynamicDefOrigin: as-pair (FormSheetDefXorigin + EditorDefXsize + 5) (FormSheetDefYorigin + FormSheetDefYsize + 5)
+DynamicCode: does copy [" "]
 
 ; Database default values
 DbDefOrigin: as-pair (WindowDefXsize - (ToolboxDefXsize + 10)) FormSheetDefYorigin
 DbDefXsize: FormSheetDefXsize
 DbDefYsize: ToolboxDefYsize - 120
 DbDefSize: as-pair DbDefXsize DbDefYsize
-
-
-; Widget re-code screen layout
-recodeScreen: layout [ 
-	title "Form Code Screen" 
-	size 700x200
-	below
-	text 680x15 left brick white "origin: name: type: size: bgcolor: fgcolor: text: font: "
-	RecodeList: text-list 680x250 data FormSheetRecodeBlock
-]
 
 ; Request color func by @greggirwin/@honix help while red has its own built-in
 set 'request-color func [
@@ -137,7 +110,6 @@ mainScreen: layout [
 		InfoGroupFormSize: text 60x25 left bold data FormSheetDefSize
 		return
 		below
-		; ContentButton: btn "Content" [Recode view recodeScreen]
 	]
 	
 	; Toolbox Widget list
@@ -169,11 +141,11 @@ mainScreen: layout [
 		return
 	]
 	
-	; Editor Toolbox
+	; Toolbox editor
 	EditorGroup: group-box ToolboxLowSize "Source" [
 		below 
-		RunButton: btn "Run" [Recode attempt [do to-block EditorArea/text]]
-		SaveSourceButton: btn "Save" [Recode write request-file EditorArea/text]
+		RunButton: btn "Run" [Recode attempt [SourceRun]]
+		SaveSourceButton: btn "Save" [SourceSave] 
 	]
 	
 	; Form default design area
@@ -181,12 +153,14 @@ mainScreen: layout [
 	FormSheet: panel FormSheetDefSize white blue cursor cross []
 	
 	; Editing area
-	at EditorDefOrigin
-	EditorArea: area EditorDefSize blue white 
+	at StaticDefOrigin
+	EditorStatic: area EditorDefSize 250.240.240 yellow
+	at DynamicDefOrigin
+	EditorDynamic: area EditorDefSize blue white " "
 
 	; Database Toolbox
 	at DbDefOrigin
-	DbToolGroup: group-box ToolboxBigSize "Database" [
+	DbToolGroup: group-box ToolboxBigSize " " [
 		below
 	]
 	
@@ -196,6 +170,9 @@ mainScreen: layout [
 
 ; Create actor for window on-resize
 mainScreen/actors: context [on-resize: func [f e][foreach-face f [if select face/actors 'on-resize [face/actors/on-resize face e]]]]
+
+; Disable static editor
+EditorStatic/enabled?: false
 
 ;
 ; Actions routines
@@ -213,7 +190,7 @@ mainScreenSizeAdjust: does [
 	WindowDefSize: as-pair WindowDefXsize WindowDefYsize
 	
 	; Compute new form size leaving room for toolboxes on left & right sides
-	FormSheetDefXsize: WindowDefXsize - (ToolboxDefXsize * 2.3)
+	FormSheetDefXsize: WindowDefXsize - (ToolboxDefXsize * 2) - 40
 	FormSheetDefYsize: WindowDefYsize - 200
 	FormSheetDefSize: as-pair FormSheetDefXsize FormSheetDefYsize
 
@@ -224,27 +201,24 @@ mainScreenSizeAdjust: does [
 	FormSheet/size: FormSheetDefSize
 	InfoGroupFormSize/text: to-string FormSheetDefSize
 	
-	; Set new editor location
-	EditorArea/offset: EditorDefOrigin
-	EditorDefXsize: FormSheetDefXsize
+	; Compute new editor size
+	EditorDefXsize: (FormSheetDefXsize / 2 ) - 5
+	EditorDefYsize: (WindowDefYsize - FormSheetDefYsize) - 20
 	EditorDefSize: as-pair EditorDefXsize EditorDefYsize
-	EditorArea/size: EditorDefSize
-	
+	EditorStatic/size: EditorDefSize
+	EditorDynamic/size: EditorDefSize
+
+	; Set new editor location
+	StaticDefOrigin: as-pair FormSheetDefXorigin (FormSheetDefYorigin + FormSheetDefYsize + 5)
+	DynamicDefOrigin: as-pair (FormSheetDefXorigin + EditorDefXsize + 5) (FormSheetDefYorigin + FormSheetDefYsize + 5)
+	EditorStatic/offset: StaticDefOrigin
+	EditorDynamic/offset: DynamicDefOrigin
+
 	; Set new database toolbox location
 	DbDefOrigin: as-pair (WindowDefXsize - (ToolboxDefXsize + 10)) FormSheetDefYorigin
 	DbToolGroup/offset: DbDefOrigin	
 	
 	Recode
-]
-
-; Clone content in editor area
-PasteWidgets: does [
-	EditorArea/text: copy "Red [ Needs: 'View ]" 
-	append EditorArea/text newline
-	append EditorArea/text "view ["
-	foreach Wgt FormSheetRecodeBlock [append EditorArea/text newline append EditorArea/text Wgt]
-	append EditorArea/text newline 
-	append EditorArea/text "]"
 ]
 
 ; Font change behavior
@@ -301,7 +275,7 @@ FormSheetAddWidget: does [
 	
 	; Make a dummy face to create the pane
 	Dly: layout reduce [(FormSheetWidgetName) (FormSheetWidgetType) (WidgetGroupSize/data) (FormSheetWidgetFiller)
-		'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) 'loose ] 		
+		'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) 'loose 'on-drop [Recode show face] ]		
 		
 	; Create new widget into sheet using the pane from dummy layout
 	append FormSheet/pane Dly/pane
@@ -311,7 +285,7 @@ FormSheetAddWidget: does [
 	Wgw/menu: ["Size  +" Size+ "Size  -" Size- "Default Size" Defsize "Default Font" Deffont "Default Color" Defcolor
 	          "Delete" Deletewt]
 	
-	; Create actor for on-menu
+	; Create actors
 	Wgw/actors: make object! [on-menu: func [face [object!] event [event!]]
 		[switch event/picked [Size+  [face/size: add face/size 10 Recode]
 							Size-  [face/size: subtract face/size 10 Recode]
@@ -321,9 +295,8 @@ FormSheetAddWidget: does [
 							Deletewt [FormSheetDeleteWidget face]            
 							]
 		]
-		on-drop: func [][Recode]
 	]
-	
+		
 	; Set widget offset
 	Wgw/offset: 25x25
 	
@@ -359,7 +332,7 @@ FormSheetSetDefcolor: func [face [object!]][
 	Recode
 ]
 
-; Compute code block for save
+; Compute static code for save
 Recode: does [
 	
 	; Init recode block
@@ -433,9 +406,41 @@ Recode: does [
 		append FormSheetRecodeBlock Widget
 	]
 	
-	; Clone widgets in editor
-	PasteWidgets
+	; Clone content in static editor area
+	EditorStatic/text: copy "Red [ Needs: 'View ]" 
+	append EditorStatic/text newline
+	append EditorStatic/text "view/no-wait ["
+	foreach Wgt FormSheetRecodeBlock [append EditorStatic/text newline append EditorStatic/text Wgt]
+	append EditorStatic/text newline 
+	append EditorStatic/text "]"
+	append EditorStatic/text newline
+	
+	; Arrange global code
+	Globalcode: copy EditorStatic/text
+	append Globalcode newline
+	append Globalcode "DynamicCode: does ["
+	append Globalcode newline
+	append Globalcode EditorDynamic/text
+	append Globalcode "]"
+	append Globalcode newline
+	append Globalcode "do DynamicCode"
+	append Globalcode newline
+	append Globalcode "halt"
 ]
+
+; Source run on screen 
+SourceRun: does [
+	do to-block Globalcode
+]
+
+; Source save to file
+SourceSave: does [
+	SourceFile: request-file 
+	either none? SourceFile [][
+		Recode write SourceFile Globalcode
+	]
+]
+
 
 ;
 ; Run code
