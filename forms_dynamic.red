@@ -12,6 +12,7 @@ Red [
 		0.3.4 "26-03-2018"	"Source editor split"
 		0.3.5 "30-04-2018"	"Dynamic code arrangement"
 		0.3.6 "30-07-2018"	"Fixed font size typo"
+		0.3.7 "19-08-2018"	"Fixed on-drop issue"
 	]
 ]
 
@@ -274,7 +275,7 @@ FormSheetAddWidget: does [
 	
 	; Make a dummy face to create the pane
 	Dly: layout reduce [(FormSheetWidgetName) (FormSheetWidgetType) (WidgetGroupSize/data) (FormSheetWidgetFiller)
-		'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) 'loose ]		
+		'font FontSel (FormSheetWidgetBackground) (FormSheetWidgetForeground) 'loose 'on-drop [Recode show face] ]		
 		
 	; Create new widget into sheet using the pane from dummy layout
 	append FormSheet/pane Dly/pane
@@ -294,8 +295,6 @@ FormSheetAddWidget: does [
 							Deletewt [FormSheetDeleteWidget face]            
 							]
 		]
-		; There is a buggy code because the face lose focus after Recode 
-		on-drop: func [face [object!]][Recode show face]
 	]
 		
 	; Set widget offset
