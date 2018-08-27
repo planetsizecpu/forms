@@ -12,7 +12,7 @@ Red [
 		0.3.4 "26-03-2018"	"Source editor split"
 		0.3.5 "30-04-2018"	"Dynamic code arrangement"
 		0.3.6 "30-07-2018"	"Fixed font size typo"
-		0.3.7 "19-08-2018"	"Fixed on-drop issue"
+		0.3.7 "27-08-2018"	"Fixed on-drop issue"
 	]
 ]
 
@@ -295,6 +295,7 @@ FormSheetAddWidget: does [
 							Deletewt [FormSheetDeleteWidget face]            
 							]
 		]
+	on-drop: func [][Recode]
 	]
 		
 	; Set widget offset
