@@ -13,6 +13,7 @@ Red [
 		0.3.5 "30-04-2018"	"Dynamic code arrangement"
 		0.3.6 "30-07-2018"	"Fixed font size typo"
 		0.3.7 "27-08-2018"	"Fixed on-drop issue"
+		0.3.8 "05-10-2018"	"Fixed widgets toolbox issue"
 	]
 ]
 
@@ -66,10 +67,11 @@ DbDefXsize: FormSheetDefXsize
 DbDefYsize: ToolboxDefYsize - 120
 DbDefSize: as-pair DbDefXsize DbDefYsize
 
-; Request color func by @greggirwin/@honix help while red has its own built-in
-set 'request-color func [
-		/size sz [pair!]
-		/title titl [string!]
+; Request color func by @greggirwin/@honix/@myself help while red has its own built-in
+set 'request-color function [
+		sz [pair!]
+		titl [string!]
+		actual [tuple!]
 		/local palette res dn?
 	][
 		sz: any [sz 150x150]
@@ -90,7 +92,7 @@ set 'request-color func [
 				]
 			]
 		][modal popup] ; no-buttons
-	res
+	either none? res [actual][res]
 ]
 
 ;
@@ -119,11 +121,11 @@ mainScreen: layout [
 		WidgetGroupSize: field 70x20 data FormSheetWidgetSize
 		return
 		across
-		WidgetGroupFgn: box 25x25 FormSheetWidgetForeground [FormSheetWidgetForeground: WidgetGroupFgn/color: request-color]
-		WidgetGroupBgn: box 25x25 FormSheetWidgetBackground [FormSheetWidgetBackground: WidgetGroupBgn/color: request-color]
+		WidgetGroupFgn: box 25x25 FormSheetWidgetForeground [FormSheetWidgetForeground: WidgetGroupFgn/color: request-color 200x200 "Select Foreground Color" WidgetGroupFgn/color]
+		WidgetGroupBgn: box 25x25 FormSheetWidgetBackground [FormSheetWidgetBackground: WidgetGroupBgn/color: request-color 200x200 "Select Background Color" WidgetGroupBgn/color]
 		return
 		below
-		WidgetGroupList: text-list data ToolboxWidgetList select 1
+		WidgetGroupList: drop-down data ToolboxWidgetList select 1
 		WidgetGroupAddbtn: btn bold "Add" [FormSheetAddWidget]
 	]
 	
@@ -141,8 +143,8 @@ mainScreen: layout [
 		return
 	]
 	
-	; Toolbox editor
-	EditorGroup: group-box ToolboxLowSize "Source" [
+	; Toolbox Source 
+	SourceGroup: group-box ToolboxLowSize "Source" [
 		below 
 		RunButton: btn "Run" [Recode attempt [SourceRun]]
 		SaveSourceButton: btn "Save" [SourceSave] 
