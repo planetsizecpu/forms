@@ -7,4 +7,4 @@ code from the user, save the whole code and run them.
 
 Red language is an open source project made by Full Stack Technologies @ www.red-lang.org
 
-![Test Image 0](/otptest02.gif)
+![Test Image 0](/formstest.gif)
