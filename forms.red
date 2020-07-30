@@ -67,33 +67,8 @@ DbDefXsize: FormSheetDefXsize
 DbDefYsize: ToolboxDefYsize - 120
 DbDefSize: as-pair DbDefXsize DbDefYsize
 
-; Request color func by @greggirwin/@honix/@myself help while red has its own built-in
-set 'request-color function [
-		sz [pair!]
-		titl [string!]
-		actual [tuple!]
-		/local palette res dn?
-	][
-		sz: any [sz 150x150]
-		palette: make image! sz
-		draw palette compose [
-			pen off
-			fill-pen linear red orange yellow green aqua blue purple
-			box 0x0 (sz)
-			fill-pen linear white transparent black 0x0 (as-pair 0 sz/y)
-			box 0x0 (sz)
-		]
-		view [
-			image palette on-down [dn?: true] on-up [
-				if dn? [
-					res: pick palette event/offset
-					unview
-				]
-			]
-		]
-		unset 'palette
-	either none? res [actual][res]
-]; Something is failing and the window will appear again and again...
+; Random color while wait for native requestor
+request-color: function [][random/seed now/time return random/secure 255.255.255.0 ]
 
 ;
 ; Main screen layout
