@@ -83,17 +83,17 @@ set 'request-color function [
 			fill-pen linear white transparent black 0x0 (as-pair 0 sz/y)
 			box 0x0 (sz)
 		]
-		view/flags compose [
-			title (any [ titl ""])
+		view [
 			image palette on-down [dn?: true] on-up [
 				if dn? [
 					res: pick palette event/offset
 					unview
 				]
 			]
-		][modal popup] ; no-buttons
+		]
+		unset 'palette
 	either none? res [actual][res]
-]
+]; Something is failing and the window will appear again and again...
 
 ;
 ; Main screen layout
