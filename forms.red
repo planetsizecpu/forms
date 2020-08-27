@@ -29,7 +29,7 @@ ToolboxDefYsize: 300
 ToolboxBigSize: as-pair ToolboxDefXsize ToolboxDefYsize
 ToolboxMidSize: as-pair ToolboxDefXsize (ToolboxDefYsize / 1.5)
 ToolboxLowSize: as-pair ToolboxDefXsize (ToolboxDefYsize / 2)
-ToolboxWidgetList: ["area" "base" "box" "button" "camera" "check" "drop-down" "drop-list" "field" 
+ToolboxWidgetList: ["area" "base" "box" "button" "calendar" "camera" "check" "drop-down" "drop-list" "field" 
 			"group-box" "image" "panel" "progress" "radio" "scroller" "slider" "tab-panel" "text" "text-list"]
 
 ; Form sheet default values
@@ -232,7 +232,8 @@ FormSheetAddWidget: does [
 		area		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		base		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		box			[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
-		button		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
+		button		[FormSheetWidgetFiller: to-string FormSheetWidgetName]
+		calendar	[FormSheetWidgetFiller: to-string FormSheetWidgetName] 		
 		camera		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		check		[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
 		drop-down	[FormSheetWidgetFiller: to-string FormSheetWidgetName] 
