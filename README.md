@@ -20,4 +20,6 @@ To compile the saved code, run the following command from you operating console:
 
 <path_to_red_compiler> -t {windows|linux|macos} -r -o <where_to_save_the_executable> <path_to_your_code>
 
+----------------------------------------------------------------
+
 Red language is an open source project made by Full Stack Technologies @ www.red-lang.org
