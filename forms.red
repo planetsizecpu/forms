@@ -1,4 +1,22 @@
-Red [needs: 'View]
+Red [	
+	Title:   "RED Forms Generator"
+	Author:  "PlanetSizeCpu"
+	Contributor: "YKProg"
+	File: 	 %forms_dynamic.red
+	Version: Under Development see below
+	Needs:	 'View
+	Usage:  {
+		Use for form scripts generation, save result then copy&paste or load code
+	}
+	History: [
+		0.1.0 "22-08-2017"	"Start of work."
+		0.3.4 "26-03-2018"	"Source editor split"
+		0.3.5 "30-04-2018"	"Dynamic code arrangement"
+		0.3.6 "30-07-2018"	"Fixed font size typo"
+		0.3.7 "27-08-2018"	"Fixed on-drop issue"
+		0.3.8 "05-10-2018"	"Fixed widgets toolbox issue"
+	]
+]
 
 WindowDefXsize: 800
 WindowDefYsize: 650
