@@ -4,6 +4,7 @@ This is a GUI design software writen in Red language, it generates VID code from
 designed form sheet, so we save time in design and locate widgets. Also it allows to include hand-made 
 code from the user, save the whole code and run it.
 
+![Test Image 0](formstest01.gif)
 ----------------------------------------------------------------
 
 Downlaod the red compiler from here:
