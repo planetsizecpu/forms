@@ -7,7 +7,7 @@ code from the user, save the whole code and run it.
 ![Test Image 0](formstest01.gif)
 ----------------------------------------------------------------
 
-Downlaod the red compiler from here:
+Download the red toolchain from here:
 
 Windows: https://static.red-lang.org/dl/auto/win/red-latest.exe
 
