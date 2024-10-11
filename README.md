@@ -3,6 +3,7 @@ GUI design software:
 This is a GUI design software writen in Red language, it generates VID code from the 
 designed form sheet, so we save time in design and locate widgets. Also it allows to include hand-made 
 code from the user, save the whole code and run it.
+Note it is no longer maintained.
 
 REQUIREMENTS: NONE on Windows, the Red toolchain in other OSs, For Linux GTK Must be installed and running.
 
